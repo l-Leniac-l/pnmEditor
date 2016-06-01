@@ -44,10 +44,9 @@ int main(int argc, char** argv)
 	std::cout << "- (qc) Clarear ou escurer banda de cor. " << std::endl;
 	std::cout << "- (ei) Espelhar imagem. " << std::endl;
 	std::cout << "- (ec) Espelhar banda. " << std::endl;
-	std::cout << "- (ni) Aplicar filtro negativo na imagem. " << std::endl;
-	std::cout << "- (nc) Aplicar filtro negativo numa banda. " << std::endl;
-	std::cout << "- (fa) Um filtro aí. " << std::endl;
-	std::cout << "- (St) Implementação temporária do Sobel. " << std::endl;
+	std::cout << "- (ni) Negativar imagem. " << std::endl;
+	std::cout << "- (nc) Begativar banda. " << std::endl;
+	std::cout << "- (fa) Filtros de imagem. " << std::endl;
 	std::cout << "- (s2) Exportar o buffer atual como P2 (greyscale). " << std::endl;
 	std::cout << "- (s3) Exportar o buffer atual como P3 (colorida). " << std::endl;
 	std::cout << "- (:q) Sair do programa. " << std::endl;
@@ -84,6 +83,7 @@ int main(int argc, char** argv)
 		else if(act == "Bo")
 		{
 			int box[3][3] = {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
+
 			filter(red, filterRed, width, height, box, 1.0f / 9);
 			filter(green, filterGreen, width, height, box, 1.0f / 9);
 			filter(blue, filterBlue, width, height, box, 1.0f / 9);
@@ -151,34 +151,32 @@ int main(int argc, char** argv)
 			if(filterName == "fo")
 			{
 				filtered = true;
-				filter(red,filterRed,width,height,focus);
-				filter(green,filterGreen,width,height,focus);
-				filter(blue,filterBlue,width,height,focus);
+				filter(red, filterRed, width, height, Filters::Focus);
+				filter(green, filterGreen, width, height, Filters::Focus);
+				filter(blue, filterBlue, width, height, Filters::Focus);
 			}
 			else if(filterName == "gb")
 			{
 				filtered = true;
-				filter(red,filterRed,width,height,gaussianBlur);
-				filter(green,filterGreen,width,height,gaussianBlur);
-				filter(blue,filterBlue,width,height,gaussianBlur);
 
-				mult(red, width, height, 1.0f / 16);
-				mult(green, width, height, 1.0f / 16);
-				mult(blue, width, height, 1.0f / 16);
+				filter(red, filterRed, width, height, Filters::Gaussian, 1.0f / 16);
+				filter(green, filterGreen, width, height, Filters::Gaussian, 1.0f / 16);
+				filter(blue, filterBlue, width, height, Filters::Gaussian, 1.0f / 16);
 			}
 			else if(filterName == "la")
 			{
 				filtered = true;
-				filter(red,filterRed,width,height,laplace);
-				filter(green,filterGreen,width,height,laplace);
-				filter(blue,filterBlue,width,height,laplace);
+
+				filter(red, filterRed, width, height, Filters::Laplace);
+				filter(green, filterGreen, width, height, Filters::Laplace);
+				filter(blue, filterBlue, width, height, Filters::Laplace);
 			}
 			else
 			{
 				filtered = true;
-//				sobelFilter(red,filterRed,width,height,sobelx,sobely);
-//				sobelFilter(green,filterGreen,width,height,sobelx,sobely);
-//				sobelFilter(blue,filterBlue,width,height,sobelx,sobely);
+//				sobelFilter(red, filterRed, width, height, sobelx, sobely);
+//				sobelFilter(green, filterGreen, width, height, sobelx, sobely);
+//				sobelFilter(blue, filterBlue, width, height, sobelx, sobely);
 			}
 		}
 

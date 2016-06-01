@@ -8,51 +8,37 @@
 
 #include "def.h"
 
-int sobelYMatrix[3][3] = {
+int Filters::SobelY[3][3] = {
 	{  1,  2,  1, },
 	{  0,  0,  0, },
 	{ -1, -2, -1, },
 };
 
-int sobelXMatrix[3][3] = {
+int Filters::SobelX[3][3] = {
 	{ 1, 0, -1, },
 	{ 2, 0, -2, },
 	{ 1, 0, -1, },
 };
 
-int focus[3][3] =
+int Filters::Focus[3][3] =
 {
-	{0,-1,0},
-	{-1,5,-1},
-	{0,-1,0}
+	{  0, -1,  0, },
+	{ -1,  5, -1, },
+	{  0, -1,  0, },
 };
 
-int gaussianBlur[3][3] =
+int Filters::Gaussian[3][3] =
 {
-	{1,2,1},
-	{2,4,2},
-	{1,2,1}
+	{ 1, 2, 1, },
+	{ 2, 4, 2, },
+	{ 1, 2, 1, },
 };
 
-int sobelx[3][3] =
+int Filters::Laplace[3][3] =
 {
-	{1,0,-1},
-	{2,0,-2},
-	{1,0,-1}
-};
-
-int sobely[3][3] =
-{
-	{1,2,1},
-	{0,0,0},
-	{-1,-2,-1}
-};
-
-int laplace[3][3] =
-{
-	{0,-1,0},
-	{-1,4,-1},
-	{0,-1,0}
+	{  0, -1,  0, },
+	{ -1,  4, -1, },
+	{  0, -1,  0, },
 };
 
 void lighten(unsigned char pixels[MAXH][MAXW], int width, int height, int mod)
@@ -95,8 +81,8 @@ void applySobel(
 {
 	unsigned char temp[MAXH][MAXW];
 
-	filter(pixels, temp, width, height, sobelYMatrix);
-	filter(temp, pixels, width, height, sobelXMatrix);
+	filter(pixels, temp, width, height, Filters::SobelY);
+	filter(temp, pixels, width, height, Filters::SobelX);
 
 	for(int x = 0; x < width; x ++)
 	{

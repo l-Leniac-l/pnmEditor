@@ -11,27 +11,27 @@
 /*
  * Limita um valor A entre B e C, ou seja, B <= A <= C.
  */
-
 #define CLAMP(A,B,C) (A <= B ? B : A >= C ? C : A)
 
 #define MAXW 1024
 #define MAXH 1024
+
 /*
-* Define as matrizes dos filtros: focus(Realçar), gaussianBlur(Desfoque Gaussiano)
-* sobel, e laplace.
-*/
-extern int focus[3][3];
+ * Define as matrizes dos filtros: focus(Realçar), gaussianBlur(Desfoque Gaussiano)
+ * sobel, e laplace.
+ */
 
-extern int gaussianBlur[3][3];
+namespace Filters
+{
+	extern int Focus[3][3];
 
-extern int sobelx[3][3];
+	extern int Gaussian[3][3];
 
-extern int sobely[3][3];
+	extern int Laplace[3][3];
 
-extern int laplace[3][3];
-
-extern int sobelYMatrix[3][3];
-extern int sobelXMatrix[3][3];
+	extern int SobelY[3][3];
+	extern int SobelX[3][3];
+}
 
 /*
  * Abre o arquivo @filename para leitura e carrega seus pixels nos vetores
@@ -61,11 +61,6 @@ void lighten(
 	unsigned char pixels[MAXH][MAXW],
 	int width, int height, int mod
 );
-void mult(
-	unsigned char pixels[MAXH][MAXW],
-	int width, int height, float mod
-);
-
 
 /*
  * Espelha um arranjo de cores.
@@ -84,24 +79,24 @@ void negative(
 );
 
 /*
-* Aplica um filtro de sobel na imagem
-*/
-
-void sobelFilter(
-	unsigned char m[MAXH][MAXW], unsigned char n[MAXH][MAXW],
-	int width, int height, int f[3][3], int g[3][3]
+ * Aplica o filtro de sobel em @pixels. 
+ */
+void applySobel(
+	unsigned char pixels[MAXH][MAXW],
+	int width, int height
 );
-/*
-* Aplica qualquer um dos outros filtros na imagem
-*/
 
+/*
+ * Aplica um filtro @f 3*3 na matriz @in e guarda o resultado da operação
+ * na matriz @out. 
+ */
 void filter(
-	unsigned char m[MAXH][MAXW], unsigned char n[MAXH][MAXW],
-	int width, int height, int f[3][3], float norm = 1.0f
+	unsigned char in[MAXH][MAXW], unsigned char out[MAXH][MAXW],
+	int width, int height, int f[3][3], float normalization = 1.0f
 );
 
 /*
- * Exporta um arranjo de cores como uma imagem preto-e-branco.
+ * Exporta uma banda de cores como uma imagem preto-e-branco.
  */
 void exportP2(
 	unsigned char pixels[MAXH][MAXW],
@@ -109,18 +104,13 @@ void exportP2(
 );
 
 /*
- * Exporta os arranjos correspondentes ao formato RGB como uma imagem colorida.
+ * Exporta as bandas @red @green e @blue como uma imagem colorida.
  */
 void exportP3(
 	unsigned char red[MAXH][MAXW],
 	unsigned char green[MAXH][MAXW],
 	unsigned char blue[MAXH][MAXW],
 	int width, int height, const std::string &fo
-);
-
-void applySobel(
-	unsigned char pixels[MAXH][MAXW],
-	int width, int height
 );
 
 #endif
