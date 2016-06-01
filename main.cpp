@@ -1,5 +1,6 @@
 /*
  * INF 110 - Trabalho prático 03
+ * Author: Lenilson Nascimento, Raphael Carmo
  * Date: Mon, May 30 2016
  */
 
@@ -52,11 +53,12 @@ int main(int argc, char** argv)
 	std::cout << std::endl;
 
 	std::string act;
+	std::string filterName;
 	do
 	{
 		std::cout << "Comando) ";
 		std::cin >> act;
-		
+
 		int b[3][3] = {{1, 0, -1}, {2, 0, -2}, {1, 0, -1}};
 
 		if(act == "qi" || act == "qc")
@@ -101,6 +103,7 @@ int main(int argc, char** argv)
 
 			std::cout << "Nome do arquivo: ";
 			std::cin >> fout;
+			fout += ".pnm";
 
 			if(act == "s2")
 			{
@@ -116,9 +119,43 @@ int main(int argc, char** argv)
 
 		else if(act == "fa")
 		{
-			filter(red, width, height, b);
-			filter(green, width, height, b);
-			filter(blue, width, height, b);
+			std::cout << "Filtros disponíveis - " << std::endl;
+			std::cout << "- (so) Sobel. (Padrao) " << std::endl;
+			std::cout << "- (fo) Focus. " << std::endl;
+			std::cout << "- (gb) Gaussian Blur. " << std::endl;
+			std::cout << "- (la) Laplace. " << std::endl;
+			std::cout << "Filtro) ";
+			std::cin >> filterName;
+			if(filterName == "fo")
+			{
+				filter(red,width,height,focus);
+				filter(green,width,height,focus);
+				filter(blue,width,height,focus);
+			}
+			else if(filterName == "gb")
+			{
+				filter(red,width,height,gaussianBlur);
+				filter(green,width,height,gaussianBlur);
+				filter(blue,width,height,gaussianBlur);
+			}
+			else if(filterName == "so")
+			{
+				filter(red,width,height,sobel);
+				filter(green,width,height,sobel);
+				filter(blue,width,height,sobel);
+			}
+			else if(filterName == "la")
+			{
+				filter(red,width,height,laplace);
+				filter(green,width,height,laplace);
+				filter(blue,width,height,laplace);
+			}
+			else
+			{
+				filter(red,width,height,sobel);
+				filter(green,width,height,sobel);
+				filter(blue,width,height,sobel);
+			}
 		}
 
 	} while(act != "Qq");

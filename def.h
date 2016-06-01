@@ -1,5 +1,6 @@
 /*
  * INF 110 - Trabalho prático 03
+ * Author: Lenilson Nascimento, Raphael Carmo
  * Date: Mon, May 31 2016
  */
 
@@ -12,6 +13,17 @@
 
 #define MAXW 1280
 #define MAXH 1280
+/*
+* Define as matrizes dos filtros: focus(Realçar), gaussianBlur(Desfoque Gaussiano)
+* sobel, e laplace.
+*/
+extern int focus[3][3];
+
+extern int gaussianBlur[3][3];
+
+extern int sobel[3][3];
+
+extern int laplace[3][3];
 
 /*
  * Abre o arquivo @filename para leitura e carrega seus pixels nos vetores
@@ -35,7 +47,7 @@ bool loadPNM(
 );
 
 /*
- * Escurece (@mod < 0) ou clareia (@mod > 0) um arranjo de cores. 
+ * Escurece (@mod < 0) ou clareia (@mod > 0) um arranjo de cores.
  */
 void lighten(
 	unsigned char pixels[MAXH][MAXW],
@@ -57,6 +69,10 @@ void negative(
 	unsigned char pixels[MAXH][MAXW],
 	int width, int height
 );
+
+/*
+* Aplica um filtro na imagem
+*/
 
 void filter(
 	unsigned char m[MAXH][MAXW],

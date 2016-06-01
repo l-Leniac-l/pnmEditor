@@ -1,10 +1,39 @@
 /*
  * INF 110 - Trabalho prático 03
+ * Author: Lenilson Nascimento, Raphael Carmo
  * Date: Mon, May 31 2016
  */
 
 #include <algorithm>
-#include "def.h"
+#include "../def.h"
+
+int focus[3][3] =
+{
+	{0,-1,0},
+	{-1,5,-1},
+	{0,-1,0}
+};
+
+int gaussianBlur[3][3] =
+{
+	{1,2,1},
+	{2,4,2},
+	{1,2,1}
+};
+
+int sobel[3][3] =
+{
+	{1,0,-1},
+	{2,0,-2},
+	{1,0,-1}
+};
+
+int laplace[3][3] =
+{
+	{0,-1,0},
+	{-1,4,-1},
+	{0,-1,0}
+};
 
 void lighten(unsigned char pixels[MAXH][MAXW], int width, int height, int mod)
 {
@@ -48,14 +77,14 @@ void filter(
 	{
 		for(int y = 0; y < height; y ++)
 		{
-			m[y][x] = CLAMP(f[1][1] * m[y - 1][x - 1] 
-				+ f[1][2] * m[y - 1][x] 
-				+ f[1][3] * m[y - 1][x + 1] 
+			m[y][x] = CLAMP(f[1][1] * m[y - 1][x - 1]
+				+ f[1][2] * m[y - 1][x]
+				+ f[1][3] * m[y - 1][x + 1]
 				+ f[2][1] * m[y][x - 1]
-				+ f[2][2] * m[y][x] 
-				+ f[2][3] * m[y][x + 1] 
-				+ f[3][1] * m[y + 1][x - 1] 
-				+ f[3][2] * m[y + 1][x] 
+				+ f[2][2] * m[y][x]
+				+ f[2][3] * m[y][x + 1]
+				+ f[3][1] * m[y + 1][x - 1]
+				+ f[3][2] * m[y + 1][x]
 				+ f[3][3] * m[y + 1][x + 1], 0, 255);
 		}
 	}

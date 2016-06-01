@@ -1,5 +1,6 @@
 /*
  * INF 110 - Trabalho prático 03
+ * Author: Lenilson Nascimento, Raphael Carmo
  * Date: Mon, May 31 2016
  */
 
@@ -8,7 +9,7 @@
 #include <fstream>
 #include <string>
 
-#include "def.h"
+#include "../def.h"
 
 void exportP2(unsigned char c[MAXH][MAXW], int width, int height, const std::string &filename)
 {
@@ -71,7 +72,7 @@ bool loadPNM(
 	std::ifstream fin;
 	std::string itype;
 
-	int mc;	
+	int mc;
 
 	/* TODO: file validation */
 	fin.open(filename, std::ios::in);
