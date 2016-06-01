@@ -1,7 +1,6 @@
 /*
  * INF 110 - Trabalho prático 03
  * Author: Lenilson Nascimento, Raphael Carmo
- * Date: Mon, May 31 2016
  */
 
 #include <algorithm>
