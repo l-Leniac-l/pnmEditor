@@ -73,13 +73,16 @@ void negative(
 );
 
 /*
-* Aplica um filtro na imagem
+* Aplica um filtro de sobel na imagem
 */
 
 void sobelFilter(
 	unsigned char m[MAXH][MAXW], unsigned char n[MAXH][MAXW],
 	int width, int height, int f[3][3], int g[3][3]
 );
+/*
+* Aplica um filtro na imagem
+*/
 
 void filter(
 	unsigned char m[MAXH][MAXW], unsigned char n[MAXH][MAXW],
