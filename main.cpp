@@ -13,11 +13,12 @@
 
 int main(int argc, char** argv)
 {
-	bool color;
+	bool color, filtered = false;
 	int width, height;
 	std::string fname;
 
 	unsigned char red[MAXH][MAXW], green[MAXH][MAXW], blue[MAXH][MAXW];
+	unsigned char filterRed[MAXH][MAXW], filterGreen[MAXH][MAXW], filterBlue[MAXH][MAXW];
 
 	if(argc != 2)
 	{
@@ -59,8 +60,6 @@ int main(int argc, char** argv)
 		std::cout << "Comando) ";
 		std::cin >> act;
 
-		int b[3][3] = {{1, 0, -1}, {2, 0, -2}, {1, 0, -1}};
-
 		if(act == "qi" || act == "qc")
 		{
 			int aux;
@@ -79,7 +78,7 @@ int main(int argc, char** argv)
 		{
 			mirror(red, width, height);
 
-			if(act == "qi")
+			if(act == "ei")
 			{
 				mirror(green, width, height);
 				mirror(blue, width, height);
@@ -111,7 +110,14 @@ int main(int argc, char** argv)
 			}
 			else
 			{
-				exportP3(red, green, blue, width, height, fout);
+				if(filtered)
+				{
+					exportP3(filterRed, filterGreen, filterBlue, width, height, fout);
+				}
+				else
+				{
+					exportP3(red, green, blue, width, height, fout);
+				}
 			}
 
 			std::cout << "✓" << std::endl;
@@ -128,33 +134,38 @@ int main(int argc, char** argv)
 			std::cin >> filterName;
 			if(filterName == "fo")
 			{
-				filter(red,width,height,focus);
-				filter(green,width,height,focus);
-				filter(blue,width,height,focus);
+				filtered = true;
+				filter(red,filterRed,width,height,focus);
+				filter(green,filterGreen,width,height,focus);
+				filter(blue,filterBlue,width,height,focus);
 			}
 			else if(filterName == "gb")
 			{
-				filter(red,width,height,gaussianBlur);
-				filter(green,width,height,gaussianBlur);
-				filter(blue,width,height,gaussianBlur);
+				filtered = true;
+				filter(red,filterRed,width,height,gaussianBlur);
+				filter(green,filterGreen,width,height,gaussianBlur);
+				filter(blue,filterBlue,width,height,gaussianBlur);
 			}
 			else if(filterName == "so")
 			{
-				filter(red,width,height,sobel);
-				filter(green,width,height,sobel);
-				filter(blue,width,height,sobel);
+				filtered = true;
+				sobelFilter(red,filterRed,width,height,sobelx,sobely);
+				sobelFilter(green,filterGreen,width,height,sobelx,sobely);
+				sobelFilter(blue,filterBlue,width,height,sobelx,sobely);
 			}
 			else if(filterName == "la")
 			{
-				filter(red,width,height,laplace);
-				filter(green,width,height,laplace);
-				filter(blue,width,height,laplace);
+				filtered = true;
+				filter(red,filterRed,width,height,laplace);
+				filter(green,filterGreen,width,height,laplace);
+				filter(blue,filterBlue,width,height,laplace);
 			}
 			else
 			{
-				filter(red,width,height,sobel);
-				filter(green,width,height,sobel);
-				filter(blue,width,height,sobel);
+				filtered = true;
+				sobelFilter(red,filterRed,width,height,sobelx,sobely);
+				sobelFilter(green,filterGreen,width,height,sobelx,sobely);
+				sobelFilter(blue,filterBlue,width,height,sobelx,sobely);
 			}
 		}
 

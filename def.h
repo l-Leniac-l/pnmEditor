@@ -11,8 +11,8 @@
 
 #define CLAMP(A,B,C) (A < B ? B : A > C ? C : A)
 
-#define MAXW 1280
-#define MAXH 1280
+#define MAXW 1024
+#define MAXH 1024
 /*
 * Define as matrizes dos filtros: focus(Realçar), gaussianBlur(Desfoque Gaussiano)
 * sobel, e laplace.
@@ -21,7 +21,9 @@ extern int focus[3][3];
 
 extern int gaussianBlur[3][3];
 
-extern int sobel[3][3];
+extern int sobelx[3][3];
+
+extern int sobely[3][3];
 
 extern int laplace[3][3];
 
@@ -74,8 +76,13 @@ void negative(
 * Aplica um filtro na imagem
 */
 
+void sobelFilter(
+	unsigned char m[MAXH][MAXW], unsigned char n[MAXH][MAXW],
+	int width, int height, int f[3][3], int g[3][3]
+);
+
 void filter(
-	unsigned char m[MAXH][MAXW],
+	unsigned char m[MAXH][MAXW], unsigned char n[MAXH][MAXW],
 	int width, int height, int f[3][3]
 );
 
