@@ -47,9 +47,10 @@ int main(int argc, char** argv)
 	std::cout << "- (ni) Aplicar filtro negativo na imagem. " << std::endl;
 	std::cout << "- (nc) Aplicar filtro negativo numa banda. " << std::endl;
 	std::cout << "- (fa) Um filtro aí. " << std::endl;
+	std::cout << "- (St) Implementação temporária do Sobel. " << std::endl;
 	std::cout << "- (s2) Exportar o buffer atual como P2 (greyscale). " << std::endl;
 	std::cout << "- (s3) Exportar o buffer atual como P3 (colorida). " << std::endl;
-	std::cout << "- (Qq) Sair do programa. " << std::endl;
+	std::cout << "- (:q) Sair do programa. " << std::endl;
 	std::cout << std::endl;
 
 	std::string act;
@@ -71,6 +72,22 @@ int main(int argc, char** argv)
 				lighten(green, width, height, aux);
 				lighten(blue, width, height, aux);
 			}
+		}
+
+		else if(act == "St")
+		{
+			applySobel(red, width, height);
+			applySobel(green, width, height);
+			applySobel(blue, width, height);
+		}
+
+		else if(act == "Bo")
+		{
+			int box[3][3] = {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
+			filter(red, filterRed, width, height, box, 1.0f / 9);
+			filter(green, filterGreen, width, height, box, 1.0f / 9);
+			filter(blue, filterBlue, width, height, box, 1.0f / 9);
+			filtered = true;
 		}
 
 		else if(act == "ei" || act == "ec")
@@ -144,13 +161,10 @@ int main(int argc, char** argv)
 				filter(red,filterRed,width,height,gaussianBlur);
 				filter(green,filterGreen,width,height,gaussianBlur);
 				filter(blue,filterBlue,width,height,gaussianBlur);
-			}
-			else if(filterName == "so")
-			{
-				filtered = true;
-				sobelFilter(red,filterRed,width,height,sobelx,sobely);
-				sobelFilter(green,filterGreen,width,height,sobelx,sobely);
-				sobelFilter(blue,filterBlue,width,height,sobelx,sobely);
+
+				mult(red, width, height, 1.0f / 16);
+				mult(green, width, height, 1.0f / 16);
+				mult(blue, width, height, 1.0f / 16);
 			}
 			else if(filterName == "la")
 			{
@@ -162,13 +176,13 @@ int main(int argc, char** argv)
 			else
 			{
 				filtered = true;
-				sobelFilter(red,filterRed,width,height,sobelx,sobely);
-				sobelFilter(green,filterGreen,width,height,sobelx,sobely);
-				sobelFilter(blue,filterBlue,width,height,sobelx,sobely);
+//				sobelFilter(red,filterRed,width,height,sobelx,sobely);
+//				sobelFilter(green,filterGreen,width,height,sobelx,sobely);
+//				sobelFilter(blue,filterBlue,width,height,sobelx,sobely);
 			}
 		}
 
-	} while(act != "Qq");
+	} while(act != ":q");
 
 	return 0;
 }

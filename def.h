@@ -7,10 +7,12 @@
 #define _DEF_H_
 
 #include <string>
+
 /*
-* Macro para remover valores menores que 0 ou maiores que 255
-*/
-#define CLAMP(A,B,C) (A < B ? B : A > C ? C : A)
+ * Limita um valor A entre B e C, ou seja, B <= A <= C.
+ */
+
+#define CLAMP(A,B,C) (A <= B ? B : A >= C ? C : A)
 
 #define MAXW 1024
 #define MAXH 1024
@@ -27,6 +29,9 @@ extern int sobelx[3][3];
 extern int sobely[3][3];
 
 extern int laplace[3][3];
+
+extern int sobelYMatrix[3][3];
+extern int sobelXMatrix[3][3];
 
 /*
  * Abre o arquivo @filename para leitura e carrega seus pixels nos vetores
@@ -56,6 +61,11 @@ void lighten(
 	unsigned char pixels[MAXH][MAXW],
 	int width, int height, int mod
 );
+void mult(
+	unsigned char pixels[MAXH][MAXW],
+	int width, int height, float mod
+);
+
 
 /*
  * Espelha um arranjo de cores.
@@ -87,7 +97,7 @@ void sobelFilter(
 
 void filter(
 	unsigned char m[MAXH][MAXW], unsigned char n[MAXH][MAXW],
-	int width, int height, int f[3][3]
+	int width, int height, int f[3][3], float norm = 1.0f
 );
 
 /*
@@ -106,6 +116,11 @@ void exportP3(
 	unsigned char green[MAXH][MAXW],
 	unsigned char blue[MAXH][MAXW],
 	int width, int height, const std::string &fo
+);
+
+void applySobel(
+	unsigned char pixels[MAXH][MAXW],
+	int width, int height
 );
 
 #endif
