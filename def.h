@@ -7,7 +7,9 @@
 #define _DEF_H_
 
 #include <string>
-
+/*
+* Macro para remover valores menores que 0 ou maiores que 255
+*/
 #define CLAMP(A,B,C) (A < B ? B : A > C ? C : A)
 
 #define MAXW 1024
