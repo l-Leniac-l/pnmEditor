@@ -80,7 +80,7 @@ void sobelFilter(
 	int width, int height, int f[3][3], int g[3][3]
 );
 /*
-* Aplica um filtro na imagem
+* Aplica qualquer um dos outros filtros na imagem
 */
 
 void filter(
