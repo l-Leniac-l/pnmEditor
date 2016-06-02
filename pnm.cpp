@@ -73,52 +73,56 @@ bool loadPNM(
 
 	int mc;
 
-	/* TODO: file validation */
 	fin.open(filename, std::ios::in);
 
-	fin >> itype;
-	fin.get();
-
-	/* Descarta os comentários */
-	char c, comm[200];
-
-	while((c = fin.get()) == '#')
+	if(fin.is_open())
 	{
-		fin.getline(comm, 200);
-	}
+		fin >> itype;
+		fin.get();
 
-	fin.putback(c);
-	fin >> width >> height >> mc;
+		/* Descarta os comentários */
+		char c, comm[200];
 
-	int r, g, b;
-	if(colored = (itype == "P3"))
-	{
-		for(int y = 0; y < height; y ++)
+		while((c = fin.get()) == '#')
 		{
-			for(int x = 0; x < width; x ++)
-			{
-				fin >> r >> g >> b;
+			fin.getline(comm, 200);
+		}
 
-				red[y][x] = r;
-				green[y][x] = g;
-				blue[y][x] = b;
+		fin.putback(c);
+		fin >> width >> height >> mc;
+
+		int r, g, b;
+		if(colored = (itype == "P3"))
+		{
+			for(int y = 0; y < height; y ++)
+			{
+				for(int x = 0; x < width; x ++)
+				{
+					fin >> r >> g >> b;
+
+					red[y][x] = r;
+					green[y][x] = g;
+					blue[y][x] = b;
+				}
 			}
 		}
-	}
 
+		else
+		{
+			for(int y = 0; y < height; y ++)
+			{
+				for(int x = 0; x < width; x ++)
+				{
+					fin >> r;
+					red[y][x] = r;
+				}
+			}
+		}
+
+		fin.close();
+
+		return true;
+	}
 	else
-	{
-		for(int y = 0; y < height; y ++)
-		{
-			for(int x = 0; x < width; x ++)
-			{
-				fin >> r;
-				red[y][x] = r;
-			}
-		}
-	}
-
-	fin.close();
-
-	return true;
+		return false;
 }
