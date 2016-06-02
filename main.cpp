@@ -40,135 +40,109 @@ int main(int argc, char** argv)
 	 */
 
 	std::cout << "Comandos disponíveis -" << std::endl;
-	std::cout << "- (qi) Clarear ou escurecer imagem. " << std::endl;
-	std::cout << "- (qc) Clarear ou escurer banda de cor. " << std::endl;
-	std::cout << "- (ei) Espelhar imagem. " << std::endl;
-	std::cout << "- (ec) Espelhar banda. " << std::endl;
-	std::cout << "- (ni) Aplicar filtro negativo na imagem. " << std::endl;
-	std::cout << "- (nc) Aplicar filtro negativo numa banda. " << std::endl;
-	std::cout << "- (fa) Um filtro aí. " << std::endl;
-	std::cout << "- (s2) Exportar o buffer atual como P2 (greyscale). " << std::endl;
-	std::cout << "- (s3) Exportar o buffer atual como P3 (colorida). " << std::endl;
-	std::cout << "- (Qq) Sair do programa. " << std::endl;
+
+/*	std::cout << "- (qi) Clarear ou escurecer imagem" << std::endl;
+	std::cout << "- (qc) Clarear ou escurer banda de cor" << std::endl;
+	std::cout << "- (ei) Espelhar imagem" << std::endl;
+	std::cout << "- (ec) Espelhar banda" << std::endl;
+	std::cout << "- (ni) Negativar imagem" << std::endl;
+	std::cout << "- (nc) Begativar banda" << std::endl;*/
+
+	std::cout << "- (fi) Filtros de imagem" << std::endl;
+	std::cout << "- (s2) Exportar o buffer atual como P2 (greyscale)" << std::endl;
+	std::cout << "- (s3) Exportar o buffer atual como P3 (colorida)" << std::endl;
+	std::cout << "- (:q) Sair do programa" << std::endl;
+
 	std::cout << std::endl;
 
-	std::string act;
-	std::string filterName;
+	int intp;
+	std::string action, strp;
+
 	do
 	{
 		std::cout << "Comando) ";
-		std::cin >> act;
+		std::cin >> action;
 
-		if(act == "qi" || act == "qc")
+		if(action == "s2" || action == "s3")
 		{
-			int aux;
-			std::cin >> aux;
+			std::cout << "Nome do arquivo) ";
+			std::cin >> strp;
+			strp += ".pnm";
 
-			lighten(red, width, height, aux);
-
-			if(act == "qi")
+			if(action == "s2")
 			{
-				lighten(green, width, height, aux);
-				lighten(blue, width, height, aux);
-			}
-		}
-
-		else if(act == "ei" || act == "ec")
-		{
-			mirror(red, width, height);
-
-			if(act == "ei")
-			{
-				mirror(green, width, height);
-				mirror(blue, width, height);
-			}
-		}
-
-		else if(act == "ni" || act == "nb")
-		{
-			negative(red, width, height);
-
-			if(act == "ni")
-			{
-				negative(green, width, height);
-				negative(blue, width, height);
-			}
-		}
-
-		else if(act == "s2" || act == "s3")
-		{
-			std::string fout;
-
-			std::cout << "Nome do arquivo: ";
-			std::cin >> fout;
-			fout += ".pnm";
-
-			if(act == "s2")
-			{
-				exportP2(red, width, height, fout);
+				exportP2(filtered ? filterRed : red, width, height, strp);
 			}
 			else
 			{
 				if(filtered)
 				{
-					exportP3(filterRed, filterGreen, filterBlue, width, height, fout);
-				}
-				else
+					exportP3(filterRed, filterGreen, filterBlue, width, height, strp);
+				} else
 				{
-					exportP3(red, green, blue, width, height, fout);
+					exportP3(red, green, blue, width, height, strp);
 				}
 			}
-
-			std::cout << "✓" << std::endl;
 		}
 
-		else if(act == "fa")
+		else if(action == "fi")
 		{
 			std::cout << "Filtros disponíveis - " << std::endl;
-			std::cout << "- (so) Sobel. (Padrao) " << std::endl;
-			std::cout << "- (fo) Focus. " << std::endl;
-			std::cout << "- (gb) Gaussian Blur. " << std::endl;
-			std::cout << "- (la) Laplace. " << std::endl;
-			std::cout << "Filtro) ";
-			std::cin >> filterName;
-			if(filterName == "fo")
+			std::cout << "- (so) Sobel" << std::endl;
+			std::cout << "- (fo) Focus" << std::endl;
+			std::cout << "- (gb) Gaussian blur" << std::endl;
+			std::cout << "- (la) Laplace" << std::endl;
+			std::cout << "- (bo) Box blur" << std::endl;
+			std::cout << "- [outros valores] Cancelar" << std::endl;
+
+			std::cout << std::endl << "Filtro) ";
+			std::cin >> strp;
+
+			filtered = true;
+
+			if(strp == "fo")
 			{
-				filtered = true;
-				filter(red,filterRed,width,height,focus);
-				filter(green,filterGreen,width,height,focus);
-				filter(blue,filterBlue,width,height,focus);
+				filter(red, filterRed, width, height, Filters::Focus);
+				filter(green, filterGreen, width, height, Filters::Focus);
+				filter(blue, filterBlue, width, height, Filters::Focus);
 			}
-			else if(filterName == "gb")
+
+			else if(strp == "gb")
 			{
-				filtered = true;
-				filter(red,filterRed,width,height,gaussianBlur);
-				filter(green,filterGreen,width,height,gaussianBlur);
-				filter(blue,filterBlue,width,height,gaussianBlur);
+				filter(red, filterRed, width, height, Filters::Gaussian, 1.0f / 16);
+				filter(green, filterGreen, width, height, Filters::Gaussian, 1.0f / 16);
+				filter(blue, filterBlue, width, height, Filters::Gaussian, 1.0f / 16);
 			}
-			else if(filterName == "so")
+
+			else if(strp == "la")
 			{
-				filtered = true;
-				sobelFilter(red,filterRed,width,height,sobelx,sobely);
-				sobelFilter(green,filterGreen,width,height,sobelx,sobely);
-				sobelFilter(blue,filterBlue,width,height,sobelx,sobely);
+				filter(red, filterRed, width, height, Filters::Laplace);
+				filter(green, filterGreen, width, height, Filters::Laplace);
+				filter(blue, filterBlue, width, height, Filters::Laplace);
 			}
-			else if(filterName == "la")
+
+			else if(strp == "so")
 			{
-				filtered = true;
-				filter(red,filterRed,width,height,laplace);
-				filter(green,filterGreen,width,height,laplace);
-				filter(blue,filterBlue,width,height,laplace);
+				sobel(red, filterRed, width, height);
+				sobel(green, filterGreen, width, height);
+				sobel(blue, filterBlue, width, height);
 			}
+
+			else if(strp == "bo")
+			{
+				filter(red, filterRed, width, height, Filters::Box, 1.0f / 9);
+				filter(green, filterGreen, width, height, Filters::Box, 1.0f / 9);
+				filter(blue, filterBlue, width, height, Filters::Box, 1.0f / 9);
+			}
+
 			else
 			{
-				filtered = true;
-				sobelFilter(red,filterRed,width,height,sobelx,sobely);
-				sobelFilter(green,filterGreen,width,height,sobelx,sobely);
-				sobelFilter(blue,filterBlue,width,height,sobelx,sobely);
+				filtered = false;
+				continue;
 			}
 		}
 
-	} while(act != "Qq");
+	} while(action != ":q");
 
 	return 0;
 }
