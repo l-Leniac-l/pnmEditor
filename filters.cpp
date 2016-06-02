@@ -41,6 +41,13 @@ int Filters::Laplace[3][3] =
 	{  0, -1,  0, },
 };
 
+int Filters::Box[3][3] =
+{
+	{ 1, 1, 1, },
+	{ 1, 1, 1, },
+	{ 1, 1, 1, },
+};
+
 void lighten(unsigned char pixels[MAXH][MAXW], int width, int height, int mod)
 {
 	for(int x = 0; x < width; x ++)
@@ -74,21 +81,22 @@ void negative(unsigned char pixels[MAXH][MAXW], int width, int height)
 	}
 }
 
-void applySobel(
-	unsigned char pixels[MAXH][MAXW],
+void sobel(
+	unsigned char in[MAXH][MAXW],
+	unsigned char out[MAXH][MAXW],
 	int width, int height
 )
 {
 	unsigned char temp[MAXH][MAXW];
 
-	filter(pixels, temp, width, height, Filters::SobelY);
-	filter(temp, pixels, width, height, Filters::SobelX);
+	filter(in, temp, width, height, Filters::SobelY);
+	filter(temp, out, width, height, Filters::SobelX);
 
 	for(int x = 0; x < width; x ++)
 	{
 		for(int y = 0; y < height; y ++)
 		{
-			pixels[y][x] = (int) CLAMP(sqrt(pow(pixels[y][x], 2) + pow(temp[y][x], 2)), 0, 255);
+			out[y][x] = (unsigned char) CLAMP(sqrt(pow(out[y][x], 2) + pow(temp[y][x], 2)), 0, 255);
 		}
 	}
 }

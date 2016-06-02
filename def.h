@@ -25,6 +25,7 @@ namespace Filters
 {
 	extern int Focus[3][3];
 
+	extern int Box[3][3];
 	extern int Gaussian[3][3];
 
 	extern int Laplace[3][3];
@@ -79,10 +80,12 @@ void negative(
 );
 
 /*
- * Aplica o filtro de sobel em @pixels. 
+ * Aplica o filtro de sobel em @pixels.
+ * @in e @out devem ser diferentes.
  */
-void applySobel(
-	unsigned char pixels[MAXH][MAXW],
+void sobel(
+	unsigned char in[MAXH][MAXW],
+	unsigned char out[MAXH][MAXW],
 	int width, int height
 );
 
