@@ -32,7 +32,9 @@ textui:
 	@echo "Build finished..."
 
 debug:
+	@echo "Debug started..."
 	${CC} ${CONSOLESRCS} ${CFLAGS} ${CFDEBUG} -o ${EXEC}
+	@echo "Debug finished..."
 
 clean:
 	@echo " Cleaning..."
