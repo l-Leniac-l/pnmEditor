@@ -26,12 +26,6 @@ int main(){
   //--------- Verifica se há imagem selecionada
   bool imageSelected = false;
 
-  //--------- Variaveis para o nome da imagem
-  /*char fileNameOpenC[200];
-  char fileNameSaveC[200];
-  std::string fileNameOpen;
-  std::string fileNameSave;*/
-
   //--------- Largura, altura e filtro
   bool color, filtered = false;
 	int width, height;
@@ -90,23 +84,23 @@ int main(){
           else
           {
             /*
-            * Se for selecionado o menu abrir imagem chamamos a função loadPNM
-            */
+             * Se for selecionado o menu abrir imagem chamamos a função loadPNM()
+             */
             if(itemselecionado+1 == 1)
             {
               Messenger::fileOpen(mensagem,width,height,color,imageSelected,red,green,blue);
             }
             /*
-            * Se for selecionado o menu salvar tons de cinza chamamos a função exportP2
-            */
+             * Se for selecionado o menu salvar tons de cinza chamamos a função exportP2()
+             */
             if(itemselecionado+1 == 2)
             {
               Messenger::fileSaveGray(mensagem,width,height,imageSelected,filtered,red,filterRed);
             }
 
             /*
-            * Se for selecionado o menu salvar colorido chamamos a função exportP3
-            */
+             * Se for selecionado o menu salvar colorido chamamos a função exportP3()
+             */
             if(itemselecionado+1 == 3)
             {
               Messenger::fileSaveColor(mensagem,width,height,imageSelected,filtered,red,green,blue,filterRed,filterGreen,filterBlue);
@@ -123,14 +117,23 @@ int main(){
               wprintw(mensagem,"Nenhum ítem foi selecionado");
           else
           {
+            /*
+             * Se for selecionado o menu clarear imagem chamamos a função imageLighten()
+             */
             if(itemselecionado+1 == 1)
             {
               Messenger::imageLighten(mensagem,width,height,imageSelected,color,red,green,blue);
             }
+            /*
+             * Se for selecionado o menu espelhar imagem chamamos a função imageMirror()
+             */
             if(itemselecionado+1 == 2)
             {
               Messenger::imageMirror(mensagem,width,height,imageSelected,color,red,green,blue);
             }
+            /*
+             * Se for selecionado o menu negative imagem chamamos a função imageNegative()
+             */
             if(itemselecionado+1 == 3)
             {
               Messenger::imageNegative(mensagem,width,height,imageSelected,color,red,green,blue);
@@ -147,22 +150,37 @@ int main(){
               wprintw(mensagem,"Nenhum ítem foi selecionado");
           else
           {
+            /*
+             * Se for selecionado o menu sobel chamamos a função filterSobel()
+             */
             if(itemselecionado+1 == 1)
             {
               Messenger::filterSobel(mensagem,width,height,imageSelected,color,filtered,red,green,blue,filterRed,filterGreen,filterBlue);
             }
+            /*
+             * Se for selecionado o menu Gaussian Blur chamamos a função filter() com gb.
+             */
             if(itemselecionado+1 == 2)
             {
               Messenger::imageFilter(mensagem,"gb",width,height,imageSelected,color,filtered,red,green,blue,filterRed,filterGreen,filterBlue);
             }
+            /*
+             * Se for selecionado o menu Box Blur chamamos a função filter() com bo.
+             */
             if(itemselecionado+1 == 3)
             {
               Messenger::imageFilter(mensagem,"bo",width,height,imageSelected,color,filtered,red,green,blue,filterRed,filterGreen,filterBlue);
             }
+            /*
+             * Se for selecionado o menu Laplace chamamos a função filter() com la.
+             */
             if(itemselecionado+1 == 4)
             {
               Messenger::imageFilter(mensagem,"la",width,height,imageSelected,color,filtered,red,green,blue,filterRed,filterGreen,filterBlue);
             }
+            /*
+             * Se for selecionado o menu Focus chamamos a função filter() com fo.
+             */
             if(itemselecionado+1 == 5)
             {
               Messenger::imageFilter(mensagem,"fo",width,height,imageSelected,color,filtered,red,green,blue,filterRed,filterGreen,filterBlue);
@@ -177,3 +195,4 @@ int main(){
   delwin(mensagem);
   endwin();
   return 0;
+}

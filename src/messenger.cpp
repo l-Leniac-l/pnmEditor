@@ -1,3 +1,8 @@
+/*
+ * INF 110 - Trabalho prático 03
+ * Author: Lenilson Nascimento, Raphael Carmo
+ */
+ 
 #include <curses.h>
 #include <stdlib.h>
 #include <string>

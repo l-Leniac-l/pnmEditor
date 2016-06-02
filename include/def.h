@@ -18,7 +18,7 @@
 
 /*
  * Define as matrizes dos filtros: focus(Realçar), gaussianBlur(Desfoque Gaussiano)
- * sobel, e laplace.
+ * box blur, sobel, e laplace.
  */
 
 namespace Filters
@@ -91,7 +91,7 @@ void sobel(
 
 /*
  * Aplica um filtro @f 3*3 na matriz @in e guarda o resultado da operação
- * na matriz @out. 
+ * na matriz @out.
  */
 void filter(
 	unsigned char in[MAXH][MAXW], unsigned char out[MAXH][MAXW],

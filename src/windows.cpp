@@ -1,8 +1,13 @@
+/*
+ * INF 110 - Trabalho prático 03
+ * Author: Lenilson Nascimento, Raphael Carmo
+ */
+
 #include <curses.h>
 #include <stdlib.h>
 #include "../include/windows.h"
 
-void Windows::criarMenu(WINDOW *menubar)  //Função encarregada de criar um menu em nosso sistema
+void Windows::criarMenu(WINDOW *menubar)
 {
     wbkgd(menubar,COLOR_PAIR(2));    //Alterando a cor de fundo do menu
     waddstr(menubar,"Imagem");    //Esta função escreve os nomes dos menus
@@ -21,16 +26,8 @@ void Windows::criarMenu(WINDOW *menubar)  //Função encarregada de criar um men
     wattroff(menubar,COLOR_PAIR(3));
 }
 
-WINDOW **Windows::criarMenuImagem(int coluna)  //Desenha os ítens do menu quando as teclas F1 ou F2 for pressionada
+WINDOW **Windows::criarMenuImagem(int coluna)
 {
-/*
-  +--------------------------------------------------------------------------------------------+
-  |   - Cria uma janela itensmenu[0] para desenhar uma caixa à volta do menu.                  |
-  |   - Cria 8 ítens como sub-janelas da janela itensmenu[0].                                  |
-  |   - Os 8 ítens são criados para poder mostrar o ítem selecionado no menu.                  |
-  |   - Para um ítem de menu parecer selecionado basta tornar a sua cor de fundo diferente.    |
-  +--------------------------------------------------------------------------------------------+
-*/
     WINDOW **itensmenu;
     itensmenu=(WINDOW **)malloc(9*sizeof(WINDOW *));
 
@@ -48,16 +45,8 @@ WINDOW **Windows::criarMenuImagem(int coluna)  //Desenha os ítens do menu quand
     return itensmenu;
 }
 
-WINDOW **Windows::criarMenuEditar(int coluna)  //Desenha os ítens do menu quando as teclas F1 ou F2 for pressionada
+WINDOW **Windows::criarMenuEditar(int coluna)
 {
-/*
-  +--------------------------------------------------------------------------------------------+
-  |   - Cria uma janela itensmenu[0] para desenhar uma caixa à volta do menu.                  |
-  |   - Cria 8 ítens como sub-janelas da janela itensmenu[0].                                  |
-  |   - Os 8 ítens são criados para poder mostrar o ítem selecionado no menu.                  |
-  |   - Para um ítem de menu parecer selecionado basta tornar a sua cor de fundo diferente.    |
-  +--------------------------------------------------------------------------------------------+
-*/
     WINDOW **itensmenu;
     itensmenu=(WINDOW **)malloc(9*sizeof(WINDOW *));
 
@@ -75,16 +64,8 @@ WINDOW **Windows::criarMenuEditar(int coluna)  //Desenha os ítens do menu quand
     return itensmenu;
 }
 
-WINDOW **Windows::criarMenuFiltros(int coluna)  //Desenha os ítens do menu quando as teclas F1 ou F2 for pressionada
+WINDOW **Windows::criarMenuFiltros(int coluna)
 {
-/*
-  +--------------------------------------------------------------------------------------------+
-  |   - Cria uma janela itensmenu[0] para desenhar uma caixa à volta do menu.                  |
-  |   - Cria 8 ítens como sub-janelas da janela itensmenu[0].                                  |
-  |   - Os 8 ítens são criados para poder mostrar o ítem selecionado no menu.                  |
-  |   - Para um ítem de menu parecer selecionado basta tornar a sua cor de fundo diferente.    |
-  +--------------------------------------------------------------------------------------------+
-*/
     WINDOW **itensmenu;
     itensmenu=(WINDOW **)malloc(9*sizeof(WINDOW *));
 
@@ -110,19 +91,8 @@ int Windows::scrollmenu(
   WINDOW **itensmenu,
   int numeroitens,
   int colunainicial
-) //Permite fazer scroll entre e dentro dos menus
+)
 {
-/*
-  +--------------------------------------------------------------------------------------------+
-  |- Lê as funções pressionadas com a função getch.                                            |
-  |- Se as setas baixo ou cima são pressionadas então os ítens abaixo ou acima são seleciona- |
-  |  dos tornando a cor do fundo do ítens diferente dos demais.                                |
-  |- Se as setas direita ou esquerda são pressionadas então o menu aberto é fechado e o outro |
-  |  é aberto.                                     |
-  |- Se a tecla ENTER for pressionada, então o ítem selecionado é retornado.                   |
-  |- Se a tecla ESC é pressionada, os menus são fechados.                                      |
-  +--------------------------------------------------------------------------------------------+
-*/
     int key;
     int selecionado=0;
     while (1)
