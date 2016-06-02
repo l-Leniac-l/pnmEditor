@@ -1,9 +1,9 @@
 #include <curses.h>
 #include <stdlib.h>
 #include <string>
-#include "windows.h"
-#include "def.h"
-#include "messenger.h"
+#include "../include/windows.h"
+#include "../include/def.h"
+#include "../include/messenger.h"
 
 int main(){
   /*

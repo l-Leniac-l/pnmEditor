@@ -1,8 +1,8 @@
 #include <curses.h>
 #include <stdlib.h>
 #include <string>
-#include "def.h"
-#include "messenger.h"
+#include "../include/def.h"
+#include "../include/messenger.h"
 
 void Messenger::fileOpen(
   WINDOW *janela,

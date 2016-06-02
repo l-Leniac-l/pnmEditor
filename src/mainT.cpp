@@ -8,7 +8,7 @@
 #include <string>
 #include <algorithm>
 
-#include "def.h"
+#include "../include/def.h"
 
 int main(int argc, char** argv)
 {

@@ -3,25 +3,37 @@ CFLAGS += -Wall -Os
 CFDEBUG = -g3 -pedantic -Wall -Wunused-parameter -Wlong-long \
           -Wsign-conversion -Wconversion \
           -Wimplicit-function-declaration
+CURSESFLAGS = -lncurses
 
-EXECT = pnmedit
-EXECUI = pnmeditUI
-SRCS = main.cpp filters.cpp pnm.cpp
-SRCSUI = main2.cpp windows.cpp messenger.cpp pnm.cpp filters.cpp
+SRCDIR = src
+TARGET = bin
+SRCEXT = cpp
+CONSOLESRCS = ${SRCDIR}/mainT.${SRCEXT} ${SRCDIR}/filters.${SRCEXT} ${SRCDIR}/pnm.${SRCEXT}
+TEXTUISRCS = ${SRCDIR}/mainUI.${SRCEXT} ${SRCDIR}/windows.cpp ${SRCDIR}/messenger.${SRCEXT} ${SRCDIR}/pnm.${SRCEXT} ${SRCDIR}/filters.${SRCEXT}
+EXEC = pnmedit
 
 all:
-	${CC} ${SRCS} ${CFLAGS} -o ${EXECT}
-	${CC} ${SRCSUI} ${CFLAGS} -lncurses -o ${EXECUI}
+	@echo "Build started..."
+	@mkdir -p ${TARGET}
+	${CC} ${CONSOLESRCS} ${CFLAGS} -o ${TARGET}/${EXEC}
+		${CC} ${TEXTUISRCS} ${CFLAGS} ${CURSESFLAGS} -o ${TARGET}/${EXEC}"UI"
+	@echo "Build finished..."
 
 console:
-	${CC} ${SRCS} ${CFLAGS} -o ${EXECT}
+	@echo "Build started..."
+	@mkdir -p ${TARGET}
+	${CC} ${CONSOLESRCS} ${CFLAGS} -o ${TARGET}/${EXEC}
+	@echo "Build finished..."
 
 textui:
-	${CC} ${SRCSUI} ${CFLAGS} -lncurses -o ${EXECUI}
+	@echo "Build started..."
+	@mkdir -p ${TARGET}
+	${CC} ${TEXTUISRCS} ${CFLAGS} ${CURSESFLAGS} -o ${TARGET}/${EXEC}"UI"
+	@echo "Build finished..."
 
 debug:
-	${CC} ${SRCS} ${CFLAGS} ${CFDEBUG} -o ${EXECT}
+	${CC} ${CONSOLESRCS} ${CFLAGS} ${CFDEBUG} -o ${EXEC}
 
 clean:
-	rm -rf ./${EXECT}
-	rm -rf ./${EXECUI}
+	@echo " Cleaning..."
+	rm -rf ${TARGET}

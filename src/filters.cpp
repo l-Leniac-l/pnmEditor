@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <cmath>
 
-#include "def.h"
+#include "../include/def.h"
 
 int Filters::SobelY[3][3] = {
 	{  1,  2,  1, },

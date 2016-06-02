@@ -1,6 +1,6 @@
 #include <curses.h>
 #include <stdlib.h>
-#include "windows.h"
+#include "../include/windows.h"
 
 void Windows::criarMenu(WINDOW *menubar)  //Função encarregada de criar um menu em nosso sistema
 {
