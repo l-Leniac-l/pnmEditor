@@ -60,17 +60,21 @@ int main(){
   mensagem=subwin(stdscr,1,79,23,1);
   Windows::criarMenu(menu);
   move(2,1);
-  printw("Este programa edita imagens com a extensao \".pnm\"");
+  printw("Este programa edita imagens com a extensão \".pnm\"");
   move(3,1);
   printw("Para editar uma imagem, siga os passos abaixo:");
   move(4,1);
-  printw("1 - Abra o menu Imagem (F1) e selecione a opçcao Abrir Imagem.");
+  printw("1 - Abra o menu Imagem (F1) e selecione a opçcão Abrir Imagem.");
   move(5,1);
   printw("2 - Use os menus Editar(F2) ou Filtros (F3) e aplique o efeito desejado.");
   move(6,1);
   printw("3 - Salve a imagem usando o menu Imagem (F1) com a cor desejada.");
   move(7,1);
-  printw("Obrigado por utilizar o pnmEditor. Creditos: Lenilson e Raphael.");
+  printw("ESC - Encerra o programa.");
+  move(12,1);
+  printw("Obrigado por utilizar o pnmEditor.");
+  move(13,1);
+  printw("Desenvolvido por: Lenilson Nascimento e Raphael Carmo.");
   refresh();
 
   do {
@@ -121,49 +125,15 @@ int main(){
           {
             if(itemselecionado+1 == 1)
             {
-              if(imageSelected){
-                echo();
-                int fator = 0; char fatorC[5], banda[1];
-                werase(mensagem);
-                wprintw(mensagem,"Digite um fator de clareamento (fator negativo escurece a imagem): ");
-                wrefresh(mensagem);
-                wgetstr(mensagem,fatorC);
-                fator = std::stoi(fatorC);
-                if(color)
-                {
-                  werase(mensagem);
-                  wprintw(mensagem,"Clarear banda de cor (0: todas, 1: vermelho,2: azul,3: verde): ");
-                  wrefresh(mensagem);
-                  wgetstr(mensagem,banda);
-                  if(banda[0] == '0')
-                  {
-                    lighten(red,width,height,fator);
-                    lighten(blue,width,height,fator);
-                    lighten(green,width,height,fator);
-                  }
-                  else if(banda[0] == '1')
-                    lighten(red,width,height,fator);
-                  else if(banda[0] == '2')
-                    lighten(blue,width,height,fator);
-                  else if(banda[0] == '3')
-                    lighten(green,width,height,fator);
-
-                }
-                else
-                {
-                  lighten(red,width,height,fator);
-                }
-                werase(mensagem);
-                wprintw(mensagem,"Fator %d aplicado a imagem!",fator);
-                wrefresh(mensagem);
-                noecho();
-              }
-              else
-              {
-                werase(mensagem);
-                wprintw(mensagem,"Nao ha imagem aberta, abra uma imagem antes de editar.");
-                wrefresh(mensagem);
-              }
+              Messenger::imageLighten(mensagem,width,height,imageSelected,color,red,green,blue);
+            }
+            if(itemselecionado+1 == 2)
+            {
+              Messenger::imageMirror(mensagem,width,height,imageSelected,color,red,green,blue);
+            }
+            if(itemselecionado+1 == 3)
+            {
+              Messenger::imageNegative(mensagem,width,height,imageSelected,color,red,green,blue);
             }
           }
           touchwin(stdscr);
@@ -176,7 +146,28 @@ int main(){
           if (itemselecionado<0)
               wprintw(mensagem,"Nenhum ítem foi selecionado");
           else
-              wprintw(mensagem,"Você selecionou o ítem %d.",itemselecionado+1);
+          {
+            if(itemselecionado+1 == 1)
+            {
+              Messenger::filterSobel(mensagem,width,height,imageSelected,color,filtered,red,green,blue,filterRed,filterGreen,filterBlue);
+            }
+            if(itemselecionado+1 == 2)
+            {
+              Messenger::imageFilter(mensagem,"gb",width,height,imageSelected,color,filtered,red,green,blue,filterRed,filterGreen,filterBlue);
+            }
+            if(itemselecionado+1 == 3)
+            {
+              Messenger::imageFilter(mensagem,"bo",width,height,imageSelected,color,filtered,red,green,blue,filterRed,filterGreen,filterBlue);
+            }
+            if(itemselecionado+1 == 4)
+            {
+              Messenger::imageFilter(mensagem,"la",width,height,imageSelected,color,filtered,red,green,blue,filterRed,filterGreen,filterBlue);
+            }
+            if(itemselecionado+1 == 5)
+            {
+              Messenger::imageFilter(mensagem,"fo",width,height,imageSelected,color,filtered,red,green,blue,filterRed,filterGreen,filterBlue);
+            }
+          }
           touchwin(stdscr);
           refresh();
       }
@@ -186,5 +177,3 @@ int main(){
   delwin(mensagem);
   endwin();
   return 0;
-
-}

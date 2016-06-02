@@ -8,11 +8,12 @@ void Windows::criarMenu(WINDOW *menubar)  //Função encarregada de criar um men
     waddstr(menubar,"Imagem");    //Esta função escreve os nomes dos menus
     wattron(menubar,COLOR_PAIR(3));  //Alterando o par de cores para 3
     waddstr(menubar," F1 ");
-    wattroff(menubar,COLOR_PAIR(3)); //Retornando para o par de cor 2.
+    wattroff(menubar,COLOR_PAIR(2)); //Retornando para o par de cor 2.
     wmove(menubar,0,20);            // Posiciona o cursor na linha 0, coluna 20
     waddstr(menubar,"Editar");
     wattron(menubar,COLOR_PAIR(3));
     waddstr(menubar," F2 ");
+    wattroff(menubar,COLOR_PAIR(2));
     wmove(menubar,0,40);            // Posiciona o cursor na linha 0, coluna 40
     waddstr(menubar,"Filtros");
     wattron(menubar,COLOR_PAIR(3));
@@ -30,7 +31,6 @@ WINDOW **Windows::criarMenuImagem(int coluna)  //Desenha os ítens do menu quand
   |   - Para um ítem de menu parecer selecionado basta tornar a sua cor de fundo diferente.    |
   +--------------------------------------------------------------------------------------------+
 */
-    int i;
     WINDOW **itensmenu;
     itensmenu=(WINDOW **)malloc(9*sizeof(WINDOW *));
 
@@ -58,21 +58,18 @@ WINDOW **Windows::criarMenuEditar(int coluna)  //Desenha os ítens do menu quand
   |   - Para um ítem de menu parecer selecionado basta tornar a sua cor de fundo diferente.    |
   +--------------------------------------------------------------------------------------------+
 */
-    int i;
     WINDOW **itensmenu;
     itensmenu=(WINDOW **)malloc(9*sizeof(WINDOW *));
 
-    itensmenu[0]=newwin(6,19,1,coluna);
+    itensmenu[0]=newwin(5,19,1,coluna);
     wbkgd(itensmenu[0],COLOR_PAIR(2));
     box(itensmenu[0],ACS_VLINE,ACS_HLINE);
     itensmenu[1]=subwin(itensmenu[0],1,17,2,coluna+1);
     itensmenu[2]=subwin(itensmenu[0],1,17,3,coluna+1);
     itensmenu[3]=subwin(itensmenu[0],1,17,4,coluna+1);
-    itensmenu[4]=subwin(itensmenu[0],1,17,5,coluna+1);
     wprintw(itensmenu[1],"Clarear/Escurecer");
     wprintw(itensmenu[2],"Espelhar");
     wprintw(itensmenu[3],"Negativo");
-    wprintw(itensmenu[4],"Tons de Cinza");
     wbkgd(itensmenu[1],COLOR_PAIR(1));
     wrefresh(itensmenu[0]);
     return itensmenu;
@@ -88,7 +85,6 @@ WINDOW **Windows::criarMenuFiltros(int coluna)  //Desenha os ítens do menu quan
   |   - Para um ítem de menu parecer selecionado basta tornar a sua cor de fundo diferente.    |
   +--------------------------------------------------------------------------------------------+
 */
-    int i;
     WINDOW **itensmenu;
     itensmenu=(WINDOW **)malloc(9*sizeof(WINDOW *));
 
