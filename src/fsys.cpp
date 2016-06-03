@@ -151,4 +151,11 @@ namespace pnmEditor
 
   	fo.close();
   }
+
+  void freeMemory(unsigned char **pixels, int width, int height)
+  {
+    for(int i = 0 ; i < width ; ++i)
+     delete[] pixels[i];
+   delete[] pixels;
+  }
 }

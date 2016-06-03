@@ -38,5 +38,7 @@
     	unsigned char **green,
     	unsigned char **blue
     );
+
+    void freeMemory(unsigned char **pixels);
   }
 #endif
