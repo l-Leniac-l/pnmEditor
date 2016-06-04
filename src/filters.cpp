@@ -1,65 +1,78 @@
 /*
- * INF 110 - Trabalho prático 03
- * Author: Lenilson Nascimento, Raphael Carmo
- */
+* INF 110 - Trabalho prático 03
+* Author: Lenilson Nascimento, Raphael Carmo
+*/
+
 #include <iostream>
 #include <algorithm>
 #include <cmath>
 
-#include "../include/def.h"
+#include <pnme/defs.h>
 
-int Filters::SobelY[3][3] = {
-	{  1,  2,  1, },
-	{  0,  0,  0, },
-	{ -1, -2, -1, },
-};
-
-int Filters::SobelX[3][3] = {
-	{ 1, 0, -1, },
-	{ 2, 0, -2, },
-	{ 1, 0, -1, },
-};
-
-int Filters::Focus[3][3] =
+namespace pnm
 {
-	{  0, -1,  0, },
-	{ -1,  5, -1, },
-	{  0, -1,  0, },
+
+int SobelY[3][3] = {
+	{  1,  2,  1 },
+	{  0,  0,  0 },
+	{ -1, -2, -1 }
 };
 
-int Filters::Gaussian[3][3] =
+int SobelX[3][3] = {
+	{ 1, 0, -1 },
+	{ 2, 0, -2 },
+	{ 1, 0, -1 }
+};
+
+int Focus[3][3] =
+{
+	{  0, -1,  0 },
+	{ -1,  5, -1 },
+	{  0, -1,  0 }
+};
+
+int Gaussian[3][3] =
 {
 	{ 1, 2, 1, },
 	{ 2, 4, 2, },
-	{ 1, 2, 1, },
+	{ 1, 2, 1, }
 };
 
-int Filters::Laplace[3][3] =
+int Laplace[3][3] =
 {
-	{  0, -1,  0, },
-	{ -1,  4, -1, },
-	{  0, -1,  0, },
+	{  0, -1,  0 },
+	{ -1,  4, -1 },
+	{  0, -1,  0 }
 };
 
-int Filters::Box[3][3] =
+int Box[3][3] =
 {
-	{ 1, 1, 1, },
-	{ 1, 1, 1, },
-	{ 1, 1, 1, },
+	{ 1, 1, 1 },
+	{ 1, 1, 1 },
+	{ 1, 1, 1 }
 };
 
-void lighten(unsigned char pixels[MAXH][MAXW], int width, int height, int mod)
+void lighten(
+	unsigned char **pixels,
+	int width,
+	int height,
+	int mod
+)
 {
 	for(int x = 0; x < width; x ++)
 	{
 		for(int y = 0; y < height; y ++)
 		{
-			pixels[y][x] = CLAMP(pixels[y][x] + mod, 0, 255);
+			pixels[x][y] = CLAMP(pixels[x][y] + mod, 0, 255);
 		}
 	}
 }
 
-void mirror(unsigned char pixels[MAXH][MAXW], int width, int height)
+void mirror(
+	unsigned char **pixels,
+	int width,
+	int height
+)
 {
 	for(int y = 0; y < height; y ++)
 	{
@@ -70,7 +83,11 @@ void mirror(unsigned char pixels[MAXH][MAXW], int width, int height)
 	}
 }
 
-void negative(unsigned char pixels[MAXH][MAXW], int width, int height)
+void negative(
+	unsigned char **pixels,
+	int width,
+	int height
+)
 {
 	for(int x = 0; x < width; x ++)
 	{
@@ -82,26 +99,53 @@ void negative(unsigned char pixels[MAXH][MAXW], int width, int height)
 }
 
 void sobel(
-	unsigned char in[MAXH][MAXW],
-	unsigned char out[MAXH][MAXW],
-	int width, int height
+	unsigned char **in,
+	unsigned char **out,
+	int width,
+	int height
 )
 {
-	unsigned char temp[MAXH][MAXW];
+	unsigned char **temp = new unsigned char[height][width];
 
-	filter(in, temp, width, height, Filters::SobelY);
-	filter(temp, out, width, height, Filters::SobelX);
+	filter(in, temp, width, height, filters::SobelY);
+	filter(tempb, out, width, height, filters::SobelX);
 
 	for(int x = 0; x < width; x ++)
 	{
 		for(int y = 0; y < height; y ++)
 		{
-			out[y][x] = (unsigned char) CLAMP(sqrt(pow(out[y][x], 2) + pow(temp[y][x], 2)), 0, 255);
+			out[y][x] = (unsigned char) CLAMP(sqrt(
+			    pow(out[y][x], 2) +
+			    pow(temp[y][x], 2)
+			  ), 0, 255);
+		}
+	}
+
+	delete[][] temp;
+}
+
+void flip90(
+	unsigned char **in,
+	unsigned char **out,
+	int width,
+	int height,
+	bool horary)
+{
+	for(int y = 0; y < height; y ++)
+	{
+		for(int x = 0; x < width; x ++)
+		{
+			out[x][y] = in[y][x];
 		}
 	}
 }
 
-int filterLine(unsigned char line[MAXW], int x, int width, int f[3])
+int filterLine(
+	unsigned char *line,
+	int x,
+	int width,
+	int f[3]
+)
 {
 	int j = line[x] * f[1];
 
@@ -119,28 +163,33 @@ int filterLine(unsigned char line[MAXW], int x, int width, int f[3])
 }
 
 void filter(
-	unsigned char in[MAXH][MAXW], unsigned char out[MAXH][MAXW],
-	int width, int height,
-	int f[3][3], float norm
+	unsigned char **in,
+	unsigned char **out,
+	int width,
+	int height,
+	int f[3][3],
+	float norm
 )
 {
 	for(int y = 0; y < height; y ++)
 	{
 		for(int x = 0; x < width; x ++)
 		{
-			int j = filterLine(in[y], x, width, f[1]);
+			int j = filters::filterLine(in[y], x, width, f[1]);
 
 			if(y >= 1)
 			{
-				j += filterLine(in[y - 1], x, width, f[0]);
+				j += filters::filterLine(in[y - 1], x, width, f[0]);
 			}
 
 			if(y < height - 1)
 			{
-				j += filterLine(in[y + 1], x, width, f[2]);
+				j += filters::filterLine(in[y + 1], x, width, f[2]);
 			}
 
 			out[y][x] = (unsigned char) CLAMP(j * norm, 0, 255);
 		}
 	}
+}
+
 }

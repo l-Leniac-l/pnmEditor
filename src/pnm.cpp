@@ -8,7 +8,7 @@
 #include <fstream>
 #include <string>
 
-#include "../include/def.h"
+#include <pnme/defs.h>
 
 void exportP2(unsigned char c[MAXH][MAXW], int width, int height, const std::string &filename)
 {

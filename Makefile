@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS += -Wall -Os
+CFLAGS += -Wall -O -I./include
 CFDEBUG = -g3 -pedantic -Wall -Wunused-parameter -Wlong-long \
           -Wsign-conversion -Wconversion \
           -Wimplicit-function-declaration
