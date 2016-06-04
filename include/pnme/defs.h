@@ -45,7 +45,7 @@ namespace filters
  *
  * Retorna true em caso de sucesso.
  */
-bool loadPNM(
+bool pnmLoad(
 	const std::string &filename,
 
 	int &width,
@@ -131,4 +131,4 @@ void exportP3(
 	const std::string &filename
 );
 
-#endif _PNM_DEFS_H_
+#endif
