@@ -62,7 +62,7 @@ void exportP3(
 	fo.close();
 }
 
-bool loadPNM(
+bool loadfile(
 	const std::string &filename,
 	int &width,
 	int &height,

@@ -16,9 +16,6 @@
 #define MAXW 1024
 #define MAXH 1024
 
-namespace pnme
-{
-
 namespace filters
 {
 	/*
@@ -45,24 +42,21 @@ namespace filters
  *
  * Retorna true em caso de sucesso.
  */
-bool pnmLoad(
+bool loadfile(
 	const std::string &filename,
-
 	int &width,
 	int &height,
-
 	bool &color,
-
-	unsigned char **red,
-	unsigned char **green,
-	unsigned char **blue
+	unsigned char *red,
+	unsigned char *green,
+	unsigned char *blue
 );
 
 /*
  * Escurece (@mod < 0) ou clareia (@mod > 0) um arranjo de cores.
  */
 void lighten(
-	unsigned char **pixels,
+	unsigned char *pixels,
 	int width,
 	int height,
 	int mod
@@ -72,7 +66,7 @@ void lighten(
  * Espelha um arranjo de cores.
  */
 void mirror(
-	unsigned char **pixels,
+	unsigned char *pixels,
 	int width,
 	int height
 );
@@ -81,7 +75,7 @@ void mirror(
  * Inverte as cores de cada pixel em uma banda de cor.
  */
 void negative(
-	unsigned char **pixels,
+	unsigned char *pixels,
 	int width,
 	int height
 );
@@ -91,8 +85,8 @@ void negative(
  * @in e @out devem ser diferentes.
  */
 void sobel(
-	unsigned char **in,
-	unsigned char **out,
+	unsigned char *in,
+	unsigned char *out,
 	int width,
 	int height
 );
@@ -102,7 +96,8 @@ void sobel(
  * na matriz @out.
  */
 void filter(
-	unsigned char **in, unsigned char **out,
+	unsigned char *in,
+	unsigned char *out,
 	int width,
 	int height,
 	int f[3][3],
@@ -113,7 +108,7 @@ void filter(
  * Exporta uma banda de cores como uma imagem preto-e-branco.
  */
 void exportP2(
-	unsigned char **pixels,
+	unsigned char *pixels,
 	int width,
 	int height,
 	const std::string &filename
@@ -123,9 +118,9 @@ void exportP2(
  * Exporta as bandas @red @green e @blue como uma imagem colorida.
  */
 void exportP3(
-	unsigned char **red,
-	unsigned char **green,
-	unsigned char **blue,
+	unsigned char *red,
+	unsigned char *green,
+	unsigned char *blue,
 	int width,
 	int height,
 	const std::string &filename

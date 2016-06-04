@@ -1,41 +1,19 @@
 CC = g++
-CFLAGS += -Wall -O -I./include
+CFLAGS += -Wall -Os
 CFDEBUG = -g3 -pedantic -Wall -Wunused-parameter -Wlong-long \
           -Wsign-conversion -Wconversion \
           -Wimplicit-function-declaration
-CURSESFLAGS = -lncurses
+
+LFLAGS += -I./include/
 
 SRCDIR = src
 TARGET = bin
-SRCEXT = cpp
-CONSOLESRCS = ${SRCDIR}/mainT.${SRCEXT} ${SRCDIR}/filters.${SRCEXT} ${SRCDIR}/pnm.${SRCEXT}
-TEXTUISRCS = ${SRCDIR}/mainUI.${SRCEXT} ${SRCDIR}/windows.cpp ${SRCDIR}/messenger.${SRCEXT} ${SRCDIR}/pnm.${SRCEXT} ${SRCDIR}/filters.${SRCEXT}
+
 EXEC = pnmedit
 
 all:
-	@echo "Build started..."
-	@mkdir -p ${TARGET}
-	${CC} ${CONSOLESRCS} ${CFLAGS} -o ${TARGET}/${EXEC}
-		${CC} ${TEXTUISRCS} ${CFLAGS} ${CURSESFLAGS} -o ${TARGET}/${EXEC}"UI"
-	@echo "Build finished..."
-
-console:
-	@echo "Build started..."
-	@mkdir -p ${TARGET}
-	${CC} ${CONSOLESRCS} ${CFLAGS} -o ${TARGET}/${EXEC}
-	@echo "Build finished..."
-
-textui:
-	@echo "Build started..."
-	@mkdir -p ${TARGET}
-	${CC} ${TEXTUISRCS} ${CFLAGS} ${CURSESFLAGS} -o ${TARGET}/${EXEC}"UI"
-	@echo "Build finished..."
-
-debug:
-	@echo "Debug started..."
-	${CC} ${CONSOLESRCS} ${CFLAGS} ${CFDEBUG} -o ${EXEC}
-	@echo "Debug finished..."
+	${CC} ${LFLAGS} ${SRCDIR}/main.cpp ${SRCDIR}/filters.cpp \
+		${SRCDIR}/file.cpp ${CFLAGS} -o ${TARGET}/${EXEC}
 
 clean:
-	@echo " Cleaning..."
-	rm -rf ${TARGET}
+	rm -rf ./${EXEC}

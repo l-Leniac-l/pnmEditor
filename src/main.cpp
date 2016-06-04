@@ -5,37 +5,30 @@
 
 #include <iostream>
 #include <string>
-#include <pnme/ui.h>
+#include <pnme/defs.h>
 
 int main(int argc, char** argv)
 {
 	int width, height;
-	bool colored, filtered = false;
+	bool color, filtered = false;
 
 	std::string filename;
 
 	unsigned char *red, *green, *blue;
 	unsigned char *fred, *fgreen, *fblue;
 
-	uiSetup();
-	filename = getFilename("Nome do arquivo");
+	std::cin >> filename;
 
-	if(pnmLoad(filename, width, height, colored, red, green, blue) == false)
+	if(loadfile(filename, width, height, color, red, green, blue) == false)
 	{
-		showMessage("Falha ao abrir imagem");
+		std::cout << "Falha ao abrir imagem" << std::endl;
 
-		goto cleanup;
+		delete[] red;
+		delete[] green;
+		delete[] blue;
+
 		exit(-1);
 	}
 
-	goto cleanup;
 	return 0;
-
-cleanup:
-	delete[] red;
-	delete[] green;
-	delete[] blue;
-	delete[] fred;
-	delete[] fgreen;
-	delete[] fblue;
 }

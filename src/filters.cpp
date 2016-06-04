@@ -9,67 +9,70 @@
 
 #include <pnme/defs.h>
 
-namespace pnm
+namespace filters
 {
+	int SobelY[3][3] =
+	{
+		{  1,  2,  1 },
+		{  0,  0,  0 },
+		{ -1, -2, -1 }
+	};
 
-int SobelY[3][3] = {
-	{  1,  2,  1 },
-	{  0,  0,  0 },
-	{ -1, -2, -1 }
-};
+	int SobelX[3][3] =
+	{
+		{ 1, 0, -1 },
+		{ 2, 0, -2 },
+		{ 1, 0, -1 }
+	};
 
-int SobelX[3][3] = {
-	{ 1, 0, -1 },
-	{ 2, 0, -2 },
-	{ 1, 0, -1 }
-};
+	int Focus[3][3] =
+	{
+		{  0, -1,  0 },
+		{ -1,  5, -1 },
+		{  0, -1,  0 }
+	};
 
-int Focus[3][3] =
-{
-	{  0, -1,  0 },
-	{ -1,  5, -1 },
-	{  0, -1,  0 }
-};
+	int Gaussian[3][3] =
+	{
+		{ 1, 2, 1, },
+		{ 2, 4, 2, },
+		{ 1, 2, 1, }
+	};
 
-int Gaussian[3][3] =
-{
-	{ 1, 2, 1, },
-	{ 2, 4, 2, },
-	{ 1, 2, 1, }
-};
+	int Laplace[3][3] =
+	{
+		{  0, -1,  0 },
+		{ -1,  4, -1 },
+		{  0, -1,  0 }
+	};
 
-int Laplace[3][3] =
-{
-	{  0, -1,  0 },
-	{ -1,  4, -1 },
-	{  0, -1,  0 }
-};
+	int Box[3][3] =
+	{
+		{ 1, 1, 1 },
+		{ 1, 1, 1 },
+		{ 1, 1, 1 }
+	};
+}
 
-int Box[3][3] =
-{
-	{ 1, 1, 1 },
-	{ 1, 1, 1 },
-	{ 1, 1, 1 }
-};
 
 void lighten(
-	unsigned char **pixels,
+	unsigned char *pixels,
 	int width,
 	int height,
 	int mod
 )
 {
-	for(int x = 0; x < width; x ++)
+	for(int y = 0; y < height; y ++)
 	{
-		for(int y = 0; y < height; y ++)
+		for(int x = 0; x < width; x ++)
 		{
-			pixels[x][y] = CLAMP(pixels[x][y] + mod, 0, 255);
+			pixels[y * width + x] = CLAMP(pixels[y * width + x] + mod, 0, 255);
 		}
 	}
 }
 
 void mirror(
-	unsigned char **pixels,
+	unsigned char *pixels,
 	int width,
 	int height
 )
@@ -78,13 +81,13 @@ void mirror(
 	{
 		for(int x = 0; x < width / 2; x ++)
 		{
-			std::swap(pixels[y][x], pixels[y][width - x - 1]);
+			std::swap(pixels[y * width + x], pixels[y * width + width - x - 1]);
 		}
 	}
 }
 
 void negative(
-	unsigned char **pixels,
+	unsigned char *pixels,
 	int width,
 	int height
 )
@@ -93,51 +96,35 @@ void negative(
 	{
 		for(int y = 0; y < height; y ++)
 		{
-			pixels[y][x] = (255 - pixels[y][x]);
+			pixels[y * width + x] = (255 - pixels[y * width + x]);
 		}
 	}
 }
 
 void sobel(
-	unsigned char **in,
-	unsigned char **out,
+	unsigned char *in,
+	unsigned char *out,
 	int width,
 	int height
 )
 {
-	unsigned char **temp = new unsigned char[height][width];
+	unsigned char *temp = new unsigned char[height * width];
 
 	filter(in, temp, width, height, filters::SobelY);
-	filter(tempb, out, width, height, filters::SobelX);
+	filter(temp, out, width, height, filters::SobelX);
 
-	for(int x = 0; x < width; x ++)
-	{
-		for(int y = 0; y < height; y ++)
-		{
-			out[y][x] = (unsigned char) CLAMP(sqrt(
-			    pow(out[y][x], 2) +
-			    pow(temp[y][x], 2)
-			  ), 0, 255);
-		}
-	}
-
-	delete[][] temp;
-}
-
-void flip90(
-	unsigned char **in,
-	unsigned char **out,
-	int width,
-	int height,
-	bool horary)
-{
 	for(int y = 0; y < height; y ++)
 	{
 		for(int x = 0; x < width; x ++)
 		{
-			out[x][y] = in[y][x];
+			out[y * width + x] = (unsigned char) CLAMP(sqrt(
+			    pow(out[y * width + x], 2) +
+			    pow(temp[y * width + x], 2)
+			  ), 0, 255);
 		}
 	}
+
+	delete[] temp;
 }
 
 int filterLine(
@@ -163,8 +150,8 @@ int filterLine(
 }
 
 void filter(
-	unsigned char **in,
-	unsigned char **out,
+	unsigned char *in,
+	unsigned char *out,
 	int width,
 	int height,
 	int f[3][3],
@@ -175,21 +162,19 @@ void filter(
 	{
 		for(int x = 0; x < width; x ++)
 		{
-			int j = filters::filterLine(in[y], x, width, f[1]);
+			int j = filterLine(&in[y * width], x, width, f[1]);
 
 			if(y >= 1)
 			{
-				j += filters::filterLine(in[y - 1], x, width, f[0]);
+				j += filterLine(&in[(y - 1) * width], x, width, f[0]);
 			}
 
 			if(y < height - 1)
 			{
-				j += filters::filterLine(in[y + 1], x, width, f[2]);
+				j += filterLine(&in[(y + 1) * width], x, width, f[2]);
 			}
 
-			out[y][x] = (unsigned char) CLAMP(j * norm, 0, 255);
+			out[y * width + x] = (unsigned char) CLAMP(j * norm, 0, 255);
 		}
 	}
-}
-
 }
