@@ -23,15 +23,15 @@ namespace filters
 	 * Utilizados em suas respectivas funções.
 	 */
 
-	extern int Focus[3][3];
+	extern int focus[3][3];
 
-	extern int Box[3][3];
-	extern int Gaussian[3][3];
+	extern int box[3][3];
+	extern int gaussian[3][3];
 
-	extern int Laplace[3][3];
+	extern int laplace[3][3];
 
-	extern int SobelY[3][3];
-	extern int SobelX[3][3];
+	extern int sobelY[3][3];
+	extern int sobelX[3][3];
 }
 
 /*
@@ -47,16 +47,16 @@ bool loadfile(
 	int &width,
 	int &height,
 	bool &color,
-	unsigned char *red,
-	unsigned char *green,
-	unsigned char *blue
+	unsigned char red[][MAXW],
+	unsigned char green[][MAXW],
+	unsigned char blue[][MAXW]
 );
 
 /*
  * Escurece (@mod < 0) ou clareia (@mod > 0) um arranjo de cores.
  */
 void lighten(
-	unsigned char *pixels,
+	unsigned char pixels[][MAXW],
 	int width,
 	int height,
 	int mod
@@ -66,7 +66,7 @@ void lighten(
  * Espelha um arranjo de cores.
  */
 void mirror(
-	unsigned char *pixels,
+	unsigned char pixels[][MAXW],
 	int width,
 	int height
 );
@@ -75,7 +75,7 @@ void mirror(
  * Inverte as cores de cada pixel em uma banda de cor.
  */
 void negative(
-	unsigned char *pixels,
+	unsigned char pixels[][MAXW],
 	int width,
 	int height
 );
@@ -85,8 +85,8 @@ void negative(
  * @in e @out devem ser diferentes.
  */
 void sobel(
-	unsigned char *in,
-	unsigned char *out,
+	unsigned char in[][MAXW],
+	unsigned char out[][MAXW],
 	int width,
 	int height
 );
@@ -96,8 +96,8 @@ void sobel(
  * na matriz @out.
  */
 void filter(
-	unsigned char *in,
-	unsigned char *out,
+	unsigned char in[][MAXW],
+	unsigned char out[][MAXW],
 	int width,
 	int height,
 	int f[3][3],
@@ -108,22 +108,22 @@ void filter(
  * Exporta uma banda de cores como uma imagem preto-e-branco.
  */
 void exportP2(
-	unsigned char *pixels,
+	const std::string &filename,
 	int width,
 	int height,
-	const std::string &filename
+	unsigned char pixels[][MAXW]
 );
 
 /*
  * Exporta as bandas @red @green e @blue como uma imagem colorida.
  */
 void exportP3(
-	unsigned char *red,
-	unsigned char *green,
-	unsigned char *blue,
+	const std::string &filename,
 	int width,
 	int height,
-	const std::string &filename
+	unsigned char red[][MAXW],
+	unsigned char green[][MAXW],
+	unsigned char blue[][MAXW]
 );
 
 #endif

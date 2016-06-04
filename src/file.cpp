@@ -14,7 +14,7 @@ void exportP2(
 	const std::string &filename,
 	int width,
 	int height,
-	unsigned char *pixels
+	unsigned char pixels[][MAXW]
 )
 {
 	std::ofstream fo;
@@ -27,7 +27,7 @@ void exportP2(
 	{
 		for(int x = 0; x < width; x ++)
 		{
-			fo << (int) pixels[y * width + x] << std::endl;
+			fo << (int) pixels[y][x] << std::endl;
 		}
 	}
 
@@ -38,9 +38,9 @@ void exportP3(
 	const std::string &filename,
 	int width,
 	int height,
-	unsigned char *red,
-	unsigned char *green,
-	unsigned char *blue
+	unsigned char red[][MAXW],
+	unsigned char green[][MAXW],
+	unsigned char blue[][MAXW]
 )
 {
 	std::ofstream fo;
@@ -53,9 +53,9 @@ void exportP3(
 	{
 		for(int x = 0; x < width; x ++)
 		{
-			fo << (int) red[y * width + x] << std::endl;
-			fo << (int) green[y * width + x] << std::endl;
-			fo << (int) blue[y * width + x] << std::endl;
+			fo << (int) red[y][x] << std::endl;
+			fo << (int) green[y][x] << std::endl;
+			fo << (int) blue[y][x] << std::endl;
 		}
 	}
 
@@ -67,9 +67,9 @@ bool loadfile(
 	int &width,
 	int &height,
 	bool &colored,
-	unsigned char *red,
-	unsigned char *green,
-	unsigned char *blue
+	unsigned char red[][MAXW],
+	unsigned char green[][MAXW],
+	unsigned char blue[][MAXW]
 )
 {
 	std::ifstream fin;
@@ -98,10 +98,6 @@ bool loadfile(
 	fin.putback(c);
 	fin >> width >> height >> mc;
 
-	red = new unsigned char[width * height];
-	green =  new unsigned char[width * height];
-	blue =  new unsigned char[width * height];
-
 	int r, g, b;
 	if(colored = (itype == "P3"))
 	{
@@ -111,9 +107,9 @@ bool loadfile(
 			{
 				fin >> r >> g >> b;
 
-				red[y * width + x] = r;
-				green[y * width + x] = g;
-				blue[y * width + x] = b;
+				red[y][x] = r;
+				green[y][x] = g;
+				blue[y][x] = b;
 			}
 		}
 	}
@@ -124,7 +120,7 @@ bool loadfile(
 			for(int x = 0; x < width; x ++)
 			{
 				fin >> r;
-				red[y * width + x] = r;
+				red[y][x] = r;
 			}
 		}
 	}
