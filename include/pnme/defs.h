@@ -71,6 +71,14 @@ void mirror(
 	int height
 );
 
+void pixelate(
+	unsigned char in[][MAXW],
+	unsigned char out[][MAXW],
+	int width,
+	int height,
+	int radius
+);
+
 /*
  * Inverte as cores de cada pixel em uma banda de cor.
  */

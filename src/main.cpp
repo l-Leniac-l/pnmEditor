@@ -25,9 +25,16 @@ int main(int argc, char** argv)
 		exit(-1);
 	}
 
-	filter(red, fred, width, height, filters::box, 1.0f / 9);
-	filter(green, fgreen, width, height, filters::box, 1.0f / 9);
-	filter(blue, fblue, width, height, filters::box, 1.0f / 9);
+//	filter(red, fred, width, height, filters::box, 1.0f / 9);
+//	filter(green, fgreen, width, height, filters::box, 1.0f / 9);
+//	filter(blue, fblue, width, height, filters::box, 1.0f / 9);
+
+	int radius = 0;
+	std::cin >> radius;
+
+	pixelate(red, fred, width, height, radius);
+	pixelate(green, fgreen, width, height, radius);
+	pixelate(blue, fblue, width, height, radius);
 
 //	sobel(red, fred, width, height);
 //	sobel(green, fgreen, width, height);

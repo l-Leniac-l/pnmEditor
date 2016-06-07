@@ -167,6 +167,39 @@ void sobel(
 	}
 }
 
+void pixelate(
+	unsigned char in[][MAXW],
+	unsigned char out[][MAXW],
+	int width,
+	int height,
+	int radius
+)
+{
+	radius = std::max(1, radius);
+
+	for(int y = 0; y < height - 1; )
+	{
+		for(int x = 0; x < width - 1; )
+		{
+			for(int z = y; z < std::min(height, y + radius); z ++)
+			{
+				for(int w = x; w < std::min(width, x + radius); w ++)
+				{
+					out[z][w] = CLAMP(
+							convolve(
+								in, x + 1, y + 1, width, height, filters::box
+							) / 8.f,
+						0, 255);
+				}
+			}
+
+			x += radius;
+		}
+
+		y += radius;
+	}
+}
+
 void filter(
 	unsigned char in[][MAXW],
 	unsigned char out[][MAXW],
