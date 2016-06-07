@@ -29,6 +29,10 @@ int main(int argc, char** argv)
 	filter(green, fgreen, width, height, filters::box, 1.0f / 9);
 	filter(blue, fblue, width, height, filters::box, 1.0f / 9);
 
+//	sobel(red, fred, width, height);
+//	sobel(green, fgreen, width, height);
+//	sobel(blue, fblue, width, height);
+
 	std::cin >> filename;
 
 	exportP3(filename, width, height, fred, fgreen, fblue);

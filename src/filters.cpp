@@ -13,16 +13,16 @@ namespace filters
 {
 	int sobelY[3][3] =
 	{
-		{  1,  2,  1 },
+		{ -1, -2, -1 },
 		{  0,  0,  0 },
-		{ -1, -2, -1 }
+		{  1,  2,  1 }
 	};
 
 	int sobelX[3][3] =
 	{
-		{ 1, 0, -1 },
-		{ 2, 0, -2 },
-		{ 1, 0, -1 }
+		{ -1, 0, 1 },
+		{ -2, 0, 2 },
+		{ -1, 0, 1 }
 	};
 
 	int focus[3][3] =
@@ -100,30 +100,6 @@ void negative(
 	}
 }
 
-void sobel(
-	unsigned char in[][MAXW],
-	unsigned char out[][MAXW],
-	int width,
-	int height
-)
-{
-	unsigned char temp[MAXH][MAXW];
-
-	filter(in, temp, width, height, filters::sobelY);
-	filter(temp, out, width, height, filters::sobelX);
-
-	for(int y = 0; y < height; y ++)
-	{
-		for(int x = 0; x < width; x ++)
-		{
-			out[y][x] = (unsigned char) CLAMP(sqrt(
-			    pow(out[y][x], 2) +
-			    pow(temp[y][x], 2)
-			  ), 0, 255);
-		}
-	}
-}
-
 int filterLine(
 	unsigned char line[],
 	int x,
@@ -146,6 +122,51 @@ int filterLine(
 	return j;
 }
 
+int convolve(
+	unsigned char in[][MAXW],
+	int x,
+	int y,
+	int width,
+	int height,
+	int f[3][3]
+)
+{
+	int j = filterLine(in[y], x, width, f[1]);
+
+	if(y >= 1)
+	{
+		j += filterLine(in[y - 1], x, width, f[0]);
+	}
+
+	if(y < height - 1)
+	{
+		j += filterLine(in[y + 1], x, width, f[2]);
+	}
+
+	return j;
+}
+
+void sobel(
+	unsigned char in[][MAXW],
+	unsigned char out[][MAXW],
+	int width,
+	int height
+)
+{
+	for(int y = 0; y < height; y ++)
+	{
+		for(int x = 0; x < width; x ++)
+		{
+			int convX = 1.f / 8 * convolve(in, x, y, width, height, filters::sobelX);
+			int convY = 1.f / 8 * convolve(in, x, y, width, height, filters::sobelY);
+
+//			out[y][x] = CLAMP(std::abs(convX) + std::abs(convY), 0, 255);
+//			out[y][x] = (int) CLAMP((convX + convY) / 2.f, 0, 255);
+			out[y][x] = (int) CLAMP(sqrt(convX * convX + convY * convY), 0, 255);
+		}
+	}
+}
+
 void filter(
 	unsigned char in[][MAXW],
 	unsigned char out[][MAXW],
@@ -159,19 +180,8 @@ void filter(
 	{
 		for(int x = 0; x < width; x ++)
 		{
-			int j = filterLine(in[y], x, width, f[1]);
-
-			if(y >= 1)
-			{
-				j += filterLine(in[y - 1], x, width, f[0]);
-			}
-
-			if(y < height - 1)
-			{
-				j += filterLine(in[y + 1], x, width, f[2]);
-			}
-
-			out[y][x] = (unsigned char) CLAMP(j * norm, 0, 255);
+			int conv = convolve(in, x, y, width, height, f);
+			out[y][x] = (unsigned char) CLAMP(conv * norm, 0, 255);
 		}
 	}
 }
