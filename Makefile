@@ -4,14 +4,16 @@ CFDEBUG = -g3 -pedantic -Wall -Wunused-parameter -Wlong-long \
           -Wsign-conversion -Wconversion \
           -Wimplicit-function-declaration
 
+LFLAGS += -I./include/
+
+SRCDIR = src
+TARGET = bin
+
 EXEC = pnmedit
-SRCS = main.cpp filters.cpp pnm.cpp
 
 all:
-	${CC} ${SRCS} ${CFLAGS} -o ${EXEC}
-
-debug:
-	${CC} ${SRCS} ${CFLAGS} ${CFDEBUG} -o ${EXEC}
+	${CC} ${LFLAGS} ${SRCDIR}/main.cpp ${SRCDIR}/filters.cpp \
+		${SRCDIR}/file.cpp ${CFLAGS} -o ${TARGET}/${EXEC}
 
 clean:
 	rm -rf ./${EXEC}

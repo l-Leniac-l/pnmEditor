@@ -3,35 +3,36 @@
  * Author: Lenilson Nascimento, Raphael Carmo
  */
 
-#ifndef _DEF_H_
-#define _DEF_H_
+#ifndef _PNM_DEFS_H_
+#define _PNM_DEFS_H_
 
 #include <string>
+#include <tuple>
 
 /*
- * Limita um valor A entre B e C, ou seja, B <= A <= C.
+ * Limita um valor A entre B e C, ou seja, força B <= A <= C.
  */
 #define CLAMP(A,B,C) (A <= B ? B : A >= C ? C : A)
 
 #define MAXW 1024
 #define MAXH 1024
 
-/*
- * Define as matrizes dos filtros: focus(Realçar), gaussianBlur(Desfoque Gaussiano)
- * sobel, e laplace.
- */
-
-namespace Filters
+namespace filters
 {
-	extern int Focus[3][3];
+	/*
+	 * Filtros definidos globalmente pela conveniência de mudanças e acesso. 
+	 * Utilizados em suas respectivas funções.
+	 */
 
-	extern int Box[3][3];
-	extern int Gaussian[3][3];
+	extern int focus[3][3];
 
-	extern int Laplace[3][3];
+	extern int box[3][3];
+	extern int gaussian[3][3];
 
-	extern int SobelY[3][3];
-	extern int SobelX[3][3];
+	extern int laplace[3][3];
+
+	extern int sobelY[3][3];
+	extern int sobelX[3][3];
 }
 
 /*
@@ -42,41 +43,46 @@ namespace Filters
  *
  * Retorna true em caso de sucesso.
  */
-bool loadPNM(
+std::tuple<unsigned char*, unsigned char*, unsigned char*> loadfile(
 	const std::string &filename,
-
 	int &width,
 	int &height,
-
-	bool &color,
-
-	unsigned char red[MAXH][MAXW],
-	unsigned char green[MAXH][MAXW],
-	unsigned char blue[MAXH][MAXW]
+	bool &color
 );
 
 /*
  * Escurece (@mod < 0) ou clareia (@mod > 0) um arranjo de cores.
  */
 void lighten(
-	unsigned char pixels[MAXH][MAXW],
-	int width, int height, int mod
+	unsigned char *pixels,
+	int width,
+	int height,
+	int mod
 );
 
 /*
  * Espelha um arranjo de cores.
  */
 void mirror(
-	unsigned char pixels[MAXH][MAXW],
-	int width, int height
+	unsigned char *pixels,
+	int width,
+	int height
+);
+
+void pixelate(
+	unsigned char *pixels,
+	int width,
+	int height,
+	int radius
 );
 
 /*
  * Inverte as cores de cada pixel em uma banda de cor.
  */
 void negative(
-	unsigned char pixels[MAXH][MAXW],
-	int width, int height
+	unsigned char *pixels,
+	int width,
+	int height
 );
 
 /*
@@ -84,36 +90,43 @@ void negative(
  * @in e @out devem ser diferentes.
  */
 void sobel(
-	unsigned char in[MAXH][MAXW],
-	unsigned char out[MAXH][MAXW],
-	int width, int height
+	unsigned char *pixels,
+	int width,
+	int height
 );
 
 /*
  * Aplica um filtro @f 3*3 na matriz @in e guarda o resultado da operação
- * na matriz @out. 
+ * na matriz @out.
  */
 void filter(
-	unsigned char in[MAXH][MAXW], unsigned char out[MAXH][MAXW],
-	int width, int height, int f[3][3], float normalization = 1.0f
+	unsigned char *pixels,
+	int width,
+	int height,
+	int f[3][3],
+	float normalization = 1.0f
 );
 
 /*
  * Exporta uma banda de cores como uma imagem preto-e-branco.
  */
 void exportP2(
-	unsigned char pixels[MAXH][MAXW],
-	int width, int height, const std::string &fo
+	const std::string &filename,
+	int width,
+	int height,
+	unsigned char pixels[][MAXW]
 );
 
 /*
  * Exporta as bandas @red @green e @blue como uma imagem colorida.
  */
 void exportP3(
-	unsigned char red[MAXH][MAXW],
-	unsigned char green[MAXH][MAXW],
-	unsigned char blue[MAXH][MAXW],
-	int width, int height, const std::string &fo
+	unsigned char *r,
+	unsigned char *g,
+	unsigned char *b,
+	int width,
+	int height,
+	const std::string &filename
 );
 
 #endif
