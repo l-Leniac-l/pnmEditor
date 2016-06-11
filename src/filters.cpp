@@ -129,16 +129,16 @@ int convolve(
 	int f[3][3]
 )
 {
-	int j = filterLine(in + y, x, width, f[1]);
+	int j = filterLine(in + y * width, x, width, f[1]);
 
 	if(y >= 1)
 	{
-		j += filterLine(in + y - 1, x, width, f[0]);
+		j += filterLine(in + (y - 1) * width, x, width, f[0]);
 	}
 
 	if(y < height - 1)
 	{
-		j += filterLine(in + y + 1, x, width, f[2]);
+		j += filterLine(in + (y + 1) * width, x, width, f[2]);
 	}
 
 	return j;

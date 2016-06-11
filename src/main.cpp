@@ -12,17 +12,11 @@
 void usage(char *basename)
 {
 	std::cout << "Uso:" << std::endl;
-
-	std::cout << basename << " <imagem>";
-	std::cout << " lighten <-255..255>, darken <-255..255>, pixelate <1..>, ";
-	std::cout << "mirror, negativate, ,sobel, gaussian, box, laplace";
-	std::cout << ", export <saída> [...]";
-
-	std::cout << std::endl;
-
-	std::cout << "(Na ausência de parâmetros para lighten, darken e pixelate, ";
-	std::cout << "eles serão silenciosamente ignorados.)" << std::endl;
-
+	std::cout << "	" << basename << " <imagem>";
+	std::cout << " [-lighten <-255..255>] [-darken <-255..255>]";
+	std::cout << " [-pixelate <1..>] [-mirror] [-negativate]";
+	std::cout << " [-sobel] [-gaussian] [-box] [-laplace]";
+	std::cout << " [-greyscale] [-p2 <saída>] [-p3 <saída>]";
 	std::cout << std::endl;
 }
 
@@ -50,29 +44,36 @@ int main(int argc, char** argv)
 		std::cout << argv[n] << std::endl;
 		if(n + 1 < argc)
 		{
-			if(ar == "lighten")
+			if(ar == "-lighten")
 			{
 				n ++;
 				lighten(r, width, height, CLAMP(atoi(argv[n]), 0, 255));
 				lighten(g, width, height, CLAMP(atoi(argv[n]), 0, 255));
 				lighten(b, width, height, CLAMP(atoi(argv[n]), 0, 255));
-			} else if(ar == "darken")
+			} else if(ar == "-darken")
 			{
 				n ++;
 				lighten(r, width, height, -1 * CLAMP(atoi(argv[n]), 0, 255));
 				lighten(g, width, height, -1 * CLAMP(atoi(argv[n]), 0, 255));
 				lighten(b, width, height, -1 * CLAMP(atoi(argv[n]), 0, 255));
-			} else if(ar == "pixelate")
+			} else if(ar == "-pixelate")
 			{
 				n ++;
 				pixelate(r, width, height, atoi(argv[n]));
 				pixelate(g, width, height, atoi(argv[n]));
 				pixelate(b, width, height, atoi(argv[n]));
-			} else if(ar == "ep3")
+			} else if(ar == "-p3")
 			{
 				n ++;
 				exportP3(r, g, b, width, height, std::string(argv[n]));
 			}
+		}
+
+		if(ar == "-sobel")
+		{
+			sobel(r, width, height);
+			sobel(g, width, height);
+			sobel(b, width, height);
 		}
 	}
 
