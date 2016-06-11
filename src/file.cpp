@@ -20,7 +20,7 @@ void exportP2(
 	std::ofstream fo;
 	fo.open(filename, std::ios::out);
 
-	fo << "P2" << std::endl << "# ~~" << std::endl;
+	fo << "P2" << std::endl;
 	fo << width << ' ' << height << " 255" << std::endl;
 
 	for(int y = 0; y < height * width; y ++)
@@ -46,7 +46,7 @@ void exportP3(
 	fo << "P3" << std::endl;
 	fo << width << ' ' << height << " 255" << std::endl;
 
-	for(int y = 0; y < height; y ++)
+	for(int y = 0; y < height * width; y ++)
 	{
 		fo << (int) red[y] << std::endl;
 		fo << (int) green[y] << std::endl;
@@ -93,13 +93,18 @@ std::tuple<unsigned char*, unsigned char*, unsigned char*> loadfile(
 	unsigned char *g = new unsigned char[width * height];
 	unsigned char *b = new unsigned char[width * height];
 
+	int ri, gi, bi;
+
 	if(colored = (itype == "P3"))
 	{
 		for(int y = 0; y < height; y ++)
 		{
 			for(int x = 0; x < width; x ++)
 			{
-				fin >> r[y * width + x] >> g[y * width + x] >> b[y * width + x];
+				fin >> ri >> gi >> bi;
+				r[y * width + x] = ri; 
+				g[y * width + x] = gi;
+				b[y * width + x] = bi;
 			}
 		}
 	}
@@ -109,7 +114,8 @@ std::tuple<unsigned char*, unsigned char*, unsigned char*> loadfile(
 		{
 			for(int x = 0; x < width; x ++)
 			{
-				fin >> r[y * width + x];
+				fin >> ri;
+				r[y * width + x] = ri;
 			}
 		}
 	}
