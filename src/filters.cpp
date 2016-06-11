@@ -68,6 +68,20 @@ void lighten(
 	}
 }
 
+void greyscale(
+	unsigned char *r,
+	unsigned char *g,
+	unsigned char *b,
+	int width,
+	int height
+)
+{
+	for(int n = 0; n < width * height; n ++)
+	{
+		r[n] = g[n] = b[n] = (r[n] * 0.2126f + 0.7152 * g[n] + 0.0722 * b[n]);
+	}
+}
+
 void mirror(
 	unsigned char *pixels,
 	int width,

@@ -36,12 +36,7 @@ namespace filters
 }
 
 /*
- * Abre o arquivo @filename para leitura e carrega seus pixels nos vetores
- * @red, @green e @blue. A largura e altura serão guardadas, respectivamente,
- * nas variáveis @width e @height, e @color será true se a imagem for
- * colorida.
- *
- * Retorna true em caso de sucesso.
+ * Abre o arquivo @filename para leitura.
  */
 std::tuple<unsigned char*, unsigned char*, unsigned char*> loadfile(
 	const std::string &filename,
@@ -58,6 +53,14 @@ void lighten(
 	int width,
 	int height,
 	int mod
+);
+
+void greyscale(
+	unsigned char *r,
+	unsigned char *g,
+	unsigned char *b,
+	int width,
+	int height
 );
 
 /*
@@ -111,10 +114,10 @@ void filter(
  * Exporta uma banda de cores como uma imagem preto-e-branco.
  */
 void exportP2(
-	const std::string &filename,
+	unsigned char *pixels,
 	int width,
 	int height,
-	unsigned char pixels[][MAXW]
+	const std::string &filename
 );
 
 /*

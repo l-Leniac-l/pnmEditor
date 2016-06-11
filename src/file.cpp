@@ -95,7 +95,7 @@ std::tuple<unsigned char*, unsigned char*, unsigned char*> loadfile(
 
 	int ri, gi, bi;
 
-	if(colored = (itype == "P3"))
+	if((colored = (itype == "P3")))
 	{
 		for(int y = 0; y < height; y ++)
 		{
@@ -115,7 +115,7 @@ std::tuple<unsigned char*, unsigned char*, unsigned char*> loadfile(
 			for(int x = 0; x < width; x ++)
 			{
 				fin >> ri;
-				r[y * width + x] = ri;
+				r[y * width + x] = g[y * width + x] = b[y * width + x] = ri;
 			}
 		}
 	}
