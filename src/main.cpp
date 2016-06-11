@@ -14,7 +14,7 @@ void usage(char *basename)
 	std::cout << "Uso:" << std::endl;
 	std::cout << "	" << basename << " <imagem>";
 	std::cout << " [-lighten <-255..255>] [-darken <-255..255>]";
-	std::cout << " [-pixelate <1..>] [-mirror] [-negativate]";
+	std::cout << " [-pixelate <0...>] [-mirror] [-negativate]";
 	std::cout << " [-sobel] [-gaussian] [-box] [-laplace]";
 	std::cout << " [-greyscale] [-p2 <saída>] [-p3 <saída>]";
 	std::cout << std::endl;
@@ -76,6 +76,10 @@ int main(int argc, char** argv)
 			sobel(b, width, height);
 		}
 	}
+
+	delete[] r;
+	delete[] g;
+	delete[] b;
 
 	return 0;
 }

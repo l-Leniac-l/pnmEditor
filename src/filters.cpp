@@ -174,9 +174,12 @@ void pixelate(
 	int radius
 )
 {
-	unsigned char *out = new unsigned char[width * height];
+	if(radius < 1)
+	{
+		return;
+	}
 
-	radius = std::max(1, radius);
+	unsigned char *out = new unsigned char[width * height];
 
 	for(int y = 0; y < height - 1; )
 	{
