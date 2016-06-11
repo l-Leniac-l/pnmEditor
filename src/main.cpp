@@ -14,7 +14,7 @@ void usage(char *basename)
 	std::cout << "Uso:" << std::endl;
 	std::cout << "	" << basename << " <imagem>";
 	std::cout << " [-lighten <-255..255>] [-darken <-255..255>]";
-	std::cout << " [-pixelate <0...>] [-mirror] [-negativate]";
+	std::cout << " [-pixelate <0...>] [-mirror] [-negative]";
 	std::cout << " [-sobel] [-gaussian] [-box] [-laplace]";
 	std::cout << " [-focus]";
 	std::cout << " [-greyscale] [-p2 <saída>] [-p3 <saída>]";
@@ -48,9 +48,8 @@ int main(int argc, char** argv)
 
 	for(int n = 2; n < argc; n ++)
 	{
-		bool valid = true;
-
 		std::string ar(argv[n]);
+
 		if(n + 1 < argc)
 		{
 			if(ar == "-lighten")
@@ -93,10 +92,6 @@ int main(int argc, char** argv)
 
 				n++;
 				exportP2(r, width, height, std::string(argv[n]));
-			}
-			else
-			{
-				valid = false;
 			}
 		}
 
@@ -148,15 +143,19 @@ int main(int argc, char** argv)
 			filter(g, width, height, filters::focus, 1.0f / 1);
 			filter(b, width, height, filters::focus, 1.0f / 1);
 		}
+		else if(ar == "-negative")
+		{
+			std::cout << "Negativando imagem..." << std::endl;
+
+			negative(r, width, height);
+			negative(g, width, height);
+			negative(b, width, height);
+		}
 		else if(ar == "-greyscale")
 		{
 			std::cout << "Transformando em preto-e-branco..." << std::endl;
 
 			greyscale(r, g, b, width, height);
-		}
-		else if(valid == false)
-		{
-			std::cout << ar << ": opção inválida" << std::endl;
 		}
 	}
 
