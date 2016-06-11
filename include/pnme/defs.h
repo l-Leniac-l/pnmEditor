@@ -7,6 +7,7 @@
 #define _PNM_DEFS_H_
 
 #include <string>
+#include <tuple>
 
 /*
  * Limita um valor A entre B e C, ou seja, força B <= A <= C.
@@ -42,21 +43,18 @@ namespace filters
  *
  * Retorna true em caso de sucesso.
  */
-bool loadfile(
+std::tuple<unsigned char*, unsigned char*, unsigned char*> loadfile(
 	const std::string &filename,
 	int &width,
 	int &height,
-	bool &color,
-	unsigned char red[][MAXW],
-	unsigned char green[][MAXW],
-	unsigned char blue[][MAXW]
+	bool &color
 );
 
 /*
  * Escurece (@mod < 0) ou clareia (@mod > 0) um arranjo de cores.
  */
 void lighten(
-	unsigned char pixels[][MAXW],
+	unsigned char *pixels,
 	int width,
 	int height,
 	int mod
@@ -66,14 +64,13 @@ void lighten(
  * Espelha um arranjo de cores.
  */
 void mirror(
-	unsigned char pixels[][MAXW],
+	unsigned char *pixels,
 	int width,
 	int height
 );
 
 void pixelate(
-	unsigned char in[][MAXW],
-	unsigned char out[][MAXW],
+	unsigned char *pixels,
 	int width,
 	int height,
 	int radius
@@ -83,7 +80,7 @@ void pixelate(
  * Inverte as cores de cada pixel em uma banda de cor.
  */
 void negative(
-	unsigned char pixels[][MAXW],
+	unsigned char *pixels,
 	int width,
 	int height
 );
@@ -93,8 +90,7 @@ void negative(
  * @in e @out devem ser diferentes.
  */
 void sobel(
-	unsigned char in[][MAXW],
-	unsigned char out[][MAXW],
+	unsigned char *pixels,
 	int width,
 	int height
 );
@@ -104,8 +100,7 @@ void sobel(
  * na matriz @out.
  */
 void filter(
-	unsigned char in[][MAXW],
-	unsigned char out[][MAXW],
+	unsigned char *pixels,
 	int width,
 	int height,
 	int f[3][3],
@@ -126,12 +121,12 @@ void exportP2(
  * Exporta as bandas @red @green e @blue como uma imagem colorida.
  */
 void exportP3(
-	const std::string &filename,
+	unsigned char *r,
+	unsigned char *g,
+	unsigned char *b,
 	int width,
 	int height,
-	unsigned char red[][MAXW],
-	unsigned char green[][MAXW],
-	unsigned char blue[][MAXW]
+	const std::string &filename
 );
 
 #endif

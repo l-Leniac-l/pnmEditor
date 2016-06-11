@@ -6,6 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
+#include <cstring>
 
 #include <pnme/defs.h>
 
@@ -55,23 +56,20 @@ namespace filters
 }
 
 void lighten(
-	unsigned char pixels[][MAXW],
+	unsigned char *pixels,
 	int width,
 	int height,
 	int mod
 )
 {
-	for(int y = 0; y < height; y ++)
+	for(int y = 0; y < height * width; y ++)
 	{
-		for(int x = 0; x < width; x ++)
-		{
-			pixels[y][x] = CLAMP(pixels[y][x] + mod, 0, 255);
-		}
+		pixels[y] = CLAMP(pixels[y] + mod, 0, 255);
 	}
 }
 
 void mirror(
-	unsigned char pixels[][MAXW],
+	unsigned char *pixels,
 	int width,
 	int height
 )
@@ -80,13 +78,13 @@ void mirror(
 	{
 		for(int x = 0; x < width / 2; x ++)
 		{
-			std::swap(pixels[y][x], pixels[y][width - x - 1]);
+			std::swap(pixels[y * width + x], pixels[y * width + width - x - 1]);
 		}
 	}
 }
 
 void negative(
-	unsigned char pixels[][MAXW],
+	unsigned char *pixels,
 	int width,
 	int height
 )
@@ -95,13 +93,13 @@ void negative(
 	{
 		for(int y = 0; y < height; y ++)
 		{
-			pixels[y][x] = (255 - pixels[y][x]);
+			pixels[y * width + x] = (255 - pixels[y * width + x]);
 		}
 	}
 }
 
 int filterLine(
-	unsigned char line[],
+	unsigned char *line,
 	int x,
 	int width,
 	int f[3]
@@ -123,7 +121,7 @@ int filterLine(
 }
 
 int convolve(
-	unsigned char in[][MAXW],
+	unsigned char *in,
 	int x,
 	int y,
 	int width,
@@ -131,28 +129,29 @@ int convolve(
 	int f[3][3]
 )
 {
-	int j = filterLine(in[y], x, width, f[1]);
+	int j = filterLine(in + y, x, width, f[1]);
 
 	if(y >= 1)
 	{
-		j += filterLine(in[y - 1], x, width, f[0]);
+		j += filterLine(in + y - 1, x, width, f[0]);
 	}
 
 	if(y < height - 1)
 	{
-		j += filterLine(in[y + 1], x, width, f[2]);
+		j += filterLine(in + y + 1, x, width, f[2]);
 	}
 
 	return j;
 }
 
 void sobel(
-	unsigned char in[][MAXW],
-	unsigned char out[][MAXW],
+	unsigned char *in,
 	int width,
 	int height
 )
 {
+	unsigned char *out = new unsigned char[width * height];
+
 	for(int y = 0; y < height; y ++)
 	{
 		for(int x = 0; x < width; x ++)
@@ -160,21 +159,23 @@ void sobel(
 			int convX = 1.f / 8 * convolve(in, x, y, width, height, filters::sobelX);
 			int convY = 1.f / 8 * convolve(in, x, y, width, height, filters::sobelY);
 
-//			out[y][x] = CLAMP(std::abs(convX) + std::abs(convY), 0, 255);
-//			out[y][x] = (int) CLAMP((convX + convY) / 2.f, 0, 255);
-			out[y][x] = (int) CLAMP(sqrt(convX * convX + convY * convY), 0, 255);
+			out[y * width + x] = (int) CLAMP(sqrt(convX * convX + convY * convY), 0, 255);
 		}
 	}
+
+	std::memcpy(in, out, width * height);
+	delete[] out;
 }
 
 void pixelate(
-	unsigned char in[][MAXW],
-	unsigned char out[][MAXW],
+	unsigned char *in,
 	int width,
 	int height,
 	int radius
 )
 {
+	unsigned char *out = new unsigned char[width * height];
+
 	radius = std::max(1, radius);
 
 	for(int y = 0; y < height - 1; )
@@ -185,7 +186,7 @@ void pixelate(
 			{
 				for(int w = x; w < std::min(width, x + radius); w ++)
 				{
-					out[z][w] = CLAMP(
+					out[z * width + w] = CLAMP(
 							convolve(
 								in, x + 1, y + 1, width, height, filters::box
 							) / 8.f,
@@ -198,23 +199,30 @@ void pixelate(
 
 		y += radius;
 	}
+
+	std::memcpy(in, out, width * height);
+	delete[] out;
 }
 
 void filter(
-	unsigned char in[][MAXW],
-	unsigned char out[][MAXW],
+	unsigned char *in,
 	int width,
 	int height,
 	int f[3][3],
 	float norm
 )
 {
+	unsigned char *out = new unsigned char[width * height];
+
 	for(int y = 0; y < height; y ++)
 	{
 		for(int x = 0; x < width; x ++)
 		{
 			int conv = convolve(in, x, y, width, height, f);
-			out[y][x] = (unsigned char) CLAMP(conv * norm, 0, 255);
+			out[y * width + x] = (unsigned char) CLAMP(conv * norm, 0, 255);
 		}
 	}
+
+	std::memcpy(in, out, width * height);
+	delete[] out;
 }

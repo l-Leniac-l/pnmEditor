@@ -11,10 +11,10 @@
 #include <pnme/defs.h>
 
 void exportP2(
-	const std::string &filename,
+	unsigned char *pixels,
 	int width,
 	int height,
-	unsigned char pixels[][MAXW]
+	const std::string &filename
 )
 {
 	std::ofstream fo;
@@ -23,53 +23,44 @@ void exportP2(
 	fo << "P2" << std::endl << "# ~~" << std::endl;
 	fo << width << ' ' << height << " 255" << std::endl;
 
-	for(int y = 0; y < height; y ++)
+	for(int y = 0; y < height * width; y ++)
 	{
-		for(int x = 0; x < width; x ++)
-		{
-			fo << (int) pixels[y][x] << std::endl;
-		}
+		fo << (int) pixels[y] << std::endl;
 	}
 
 	fo.close();
 }
 
 void exportP3(
-	const std::string &filename,
+	unsigned char *red,
+	unsigned char *green,
+	unsigned char *blue,
 	int width,
 	int height,
-	unsigned char red[][MAXW],
-	unsigned char green[][MAXW],
-	unsigned char blue[][MAXW]
+	const std::string &filename
 )
 {
 	std::ofstream fo;
 	fo.open(filename, std::ios::out);
 
-	fo << "P3" << std::endl << "# ~~" << std::endl;
+	fo << "P3" << std::endl;
 	fo << width << ' ' << height << " 255" << std::endl;
 
 	for(int y = 0; y < height; y ++)
 	{
-		for(int x = 0; x < width; x ++)
-		{
-			fo << (int) red[y][x] << std::endl;
-			fo << (int) green[y][x] << std::endl;
-			fo << (int) blue[y][x] << std::endl;
-		}
+		fo << (int) red[y] << std::endl;
+		fo << (int) green[y] << std::endl;
+		fo << (int) blue[y] << std::endl;
 	}
 
 	fo.close();
 }
 
-bool loadfile(
+std::tuple<unsigned char*, unsigned char*, unsigned char*> loadfile(
 	const std::string &filename,
 	int &width,
 	int &height,
-	bool &colored,
-	unsigned char red[][MAXW],
-	unsigned char green[][MAXW],
-	unsigned char blue[][MAXW]
+	bool &colored
 )
 {
 	std::ifstream fin;
@@ -81,7 +72,7 @@ bool loadfile(
 
 	if(fin.is_open() == false)
 	{
-		return false;
+		return std::make_tuple(nullptr, nullptr, nullptr);
 	}
 
 	fin >> itype;
@@ -98,18 +89,17 @@ bool loadfile(
 	fin.putback(c);
 	fin >> width >> height >> mc;
 
-	int r, g, b;
+	unsigned char *r = new unsigned char[width * height];
+	unsigned char *g = new unsigned char[width * height];
+	unsigned char *b = new unsigned char[width * height];
+
 	if(colored = (itype == "P3"))
 	{
 		for(int y = 0; y < height; y ++)
 		{
 			for(int x = 0; x < width; x ++)
 			{
-				fin >> r >> g >> b;
-
-				red[y][x] = r;
-				green[y][x] = g;
-				blue[y][x] = b;
+				fin >> r[y * width + x] >> g[y * width + x] >> b[y * width + x];
 			}
 		}
 	}
@@ -119,12 +109,12 @@ bool loadfile(
 		{
 			for(int x = 0; x < width; x ++)
 			{
-				fin >> r;
-				red[y][x] = r;
+				fin >> r[y * width + x];
 			}
 		}
 	}
 
 	fin.close();
-	return true;
+
+	return std::make_tuple(r, g, b);
 }
