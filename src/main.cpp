@@ -14,7 +14,7 @@ void usage(char *basename)
 	std::cout << "Uso:" << std::endl;
 	std::cout << "	" << basename << " <imagem>";
 	std::cout << " [-lighten <-255..255>] [-darken <-255..255>]";
-	std::cout << " [-pixelate <0...>] [-mirror] [-negative]";
+	std::cout << " [-pixelate <0...>] [-mirror] [-invert]";
 	std::cout << " [-sobel] [-gaussian] [-box] [-laplace]";
 	std::cout << " [-focus]";
 	std::cout << " [-greyscale] [-p2 <saída>] [-p3 <saída>]";
@@ -143,9 +143,9 @@ int main(int argc, char** argv)
 			filter(g, width, height, filters::focus, 1.0f / 1);
 			filter(b, width, height, filters::focus, 1.0f / 1);
 		}
-		else if(ar == "-negative")
+		else if(ar == "-invert")
 		{
-			std::cout << "Negativando imagem..." << std::endl;
+			std::cout << "Invertendo cores..." << std::endl;
 
 			negative(r, width, height);
 			negative(g, width, height);
