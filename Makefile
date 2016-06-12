@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS += -Wall -Os
+CFLAGS += -Wall -Os -std=c++0x
 CFDEBUG = -g3 -pedantic -Wall -Wunused-parameter -Wlong-long \
           -Wsign-conversion -Wconversion \
           -Wimplicit-function-declaration
@@ -12,8 +12,11 @@ TARGET = bin
 EXEC = pnmedit
 
 all:
-	${CC} ${LFLAGS} ${SRCDIR}/main.cpp ${SRCDIR}/filters.cpp \
+	@echo "Build process started..."
+	@${CC} ${LFLAGS} ${SRCDIR}/main.cpp ${SRCDIR}/filters.cpp \
 		${SRCDIR}/file.cpp ${CFLAGS} -o ${TARGET}/${EXEC}
-
+	@echo "Build process finished..."
 clean:
-	rm -rf ./${EXEC}
+	@echo "Clean process started..."
+	@rm -rf ./${EXEC}
+	@echo "Clean process finished..."
