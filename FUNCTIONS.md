@@ -16,7 +16,7 @@ Escurece a imagem em um fator de `80`. Caso `valor` seja negativo, a imagem ser�
     -pixelate 5
 
 Pixeliza a imagem, com uma intensidade igual a `5`. Caso `n` seja <= 0, nada
- será feito. 
+ será feito.
 
 
     -mirror
@@ -47,7 +47,7 @@ Aplica o filtro laplace na imagem.
 
 Converte as bandas da imagem para preto-e-branco utilizando o luma como
 referência. As operações para imagens coloridas continuarão sendo
-utilizadas. 
+utilizadas.
 
     -p2 saida.pnm
 
@@ -57,3 +57,4 @@ Converte a imagem para preto-e-branco e a Exporta para o arquivo `saida.pnm`.
 
 Exporta para o arquivo `saida.pnm` o buffer atual como uma imagem colorida.
 
+##### Obs: Alguns exemplos de imagens utilizando estes efeitos estão no diretório `<sources>/examples` 

@@ -13,8 +13,8 @@ Abra o terminal e navegue até o diretório onde se encontram os fontes.
 
 Digite no terminal o comando `Make` e aguarde o processo de compilação.
 
-O arquivo executável será gerado no diretório `/bin`
+O arquivo executável será gerado no diretório `<sources>/bin`
 
-Para rodar o programa, navegue até o diretório `/bin` e execute o arquivo `pnmedit`
+Para rodar o programa, navegue até o diretório `<sources>/bin` e execute o arquivo `pnmedit`
 
 Todos os comandos do programa estão definidos no arquivo `comandos.pdf`.
